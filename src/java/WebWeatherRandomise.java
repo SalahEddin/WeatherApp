@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Salah
  */
-public class WebWeatherData extends HttpServlet {
+public class WebWeatherRandomise extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,45 +37,21 @@ public class WebWeatherData extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet WebWeatherData</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet WebWeatherData at " + request.getContextPath() + "</h1>");
-            // Connection
+            
             Connection conn = null;
             try{
                 Class.forName("org.sqlite.JDBC");
                 String Path = getServletContext().getRealPath("/WEB-INF/");
                 conn = DriverManager.getConnection("jdbc:sqlite:" + Path + "\\WeatherDB.sqlite");
                 Statement stmt = conn.createStatement();
-                String query = "SELECT * FROM DATA,LOCATION WHERE ID = LOCATION_ID";
-                ResultSet rs = stmt.executeQuery(query);
-                out.println(
-                    "<table style=\"width:100%\">\n" +
-                    "<tr>\n" +
-                            "<td>Temprature</td>\n" +
-                            "<td>Rain</td>\n" +
-                            "<td>Clouds</td>\n" +
-                            "<td>Wind</td>\n" +
-                            "<td>Last Update</td>\n" +
-                    "</tr>"
-                );  
-                while (rs.next()) {
-                    out.println(
-                            "  <tr>\n" +
-                                    "<td>"+rs.getString("TEMP")+"</td>\n" +
-                                    "<td>"+rs.getString("RAIN")+"</td>\n" +
-                                    "<td>"+rs.getString("CLOUD")+"</td>\n" +
-                                    "<td>"+rs.getString("WIND")+"</td>\n" +
-                                    "<td>"+rs.getString("UPDATED")+"</td>\n" +
-                            "  </tr>"
-                    );
-                }
-                out.println("</table>");
+                String query = "UPDATE DATA "
+                        + "SET TEMP =   ABS(RANDOM() % 50)"
+                        + "SET RAIN =   ABS(RANDOM() % 100)"
+                        + "SET CLOUD =  ABS(RANDOM() % 100)"
+                        + "SET WIND =   ABS(RANDOM() % 30)"
+                        + "SET UPDATED = CURRENT_TIMESTAMP";
+                stmt.executeQuery(query);
+                response.sendRedirect("/WeatherApp/WebWeatherDebug");
             }
             catch(SQLException e){System.out.print(e.toString());}
             catch(Exception e){System.out.print(e.toString());}
@@ -86,8 +62,6 @@ public class WebWeatherData extends HttpServlet {
                     Logger.getLogger(WebWeatherDebug.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            out.println("</body>");
-            out.println("</html>");
         }
     }
 
@@ -117,7 +91,33 @@ public class WebWeatherData extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // processRequest(request, response);
+        
+        response.setContentType("text/plain");
+        Connection conn = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            String Path = getServletContext().getRealPath("/WEB-INF/");
+            conn = DriverManager.getConnection("jdbc:sqlite:" + Path + "\\WeatherDB.sqlite");
+            Statement stmt = conn.createStatement();
+            String query = "UPDATE DATA "
+                    + "SET TEMP =   ABS(RANDOM() % 50)-10"
+                    + ", RAIN =   ABS(RANDOM() % 100)"
+                    + ", CLOUD =  ABS(RANDOM() % 100)"
+                    + ", WIND =   ABS(RANDOM() % 30)"
+                    + ", UPDATED = CURRENT_TIMESTAMP";
+            stmt.executeQuery(query);
+            response.sendRedirect("/WeatherApp/WebWeatherDebug");
+        } catch (Exception e) {
+            System.out.print(e.toString());
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ignored) {
+            }
+        }
     }
 
     /**
