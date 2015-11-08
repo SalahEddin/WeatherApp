@@ -106,7 +106,7 @@ public class WebWeatherRandomise extends HttpServlet {
                     + ", CLOUD =  ABS(RANDOM() % 100)"
                     + ", WIND =   ABS(RANDOM() % 30)"
                     + ", UPDATED = CURRENT_TIMESTAMP";
-            stmt.executeQuery(query);
+            stmt.execute(query);
             response.sendRedirect("/WeatherApp/WebWeatherDebug");
         } catch (Exception e) {
             System.out.print(e.toString());
