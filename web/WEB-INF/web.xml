@@ -4,9 +4,17 @@
         <servlet-name>WebWeatherDebug</servlet-name>
         <servlet-class>WebWeatherDebug</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>WebWeatherData</servlet-name>
+        <servlet-class>WebWeatherData</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>WebWeatherDebug</servlet-name>
         <url-pattern>/WebWeatherDebug</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WebWeatherData</servlet-name>
+        <url-pattern>/WebWeatherData</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
