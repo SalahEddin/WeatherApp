@@ -56,11 +56,26 @@ public class WebWeatherDebug extends HttpServlet {
                 Statement stmt = conn.createStatement();
                 String query = "SELECT * FROM LOCATION";
                 ResultSet rs = stmt.executeQuery(query);
+                out.println(
+                    "<table style=\"width:100%\">\n" +
+                    "<tr>\n" +
+                            "<td>Latitude</td>\n" +
+                            "<td>Longitude</td>\n" +
+                            "<td>Name</td>\n" +
+                            "<td>Description</td>\n" +
+                    "</tr>"
+                );  
                 while (rs.next()) {
-                    out.println("<p>");
-                    out.println(rs.getString("NAME"));
-                    out.println("</p>");
+                    out.println(
+                            "  <tr>\n" +
+                                    "<td>"+rs.getString("LAT")+"</td>\n" +
+                                    "<td>"+rs.getString("LONG")+"</td>\n" +
+                                    "<td>"+rs.getString("NAME")+"</td>\n" +
+                                    "<td>"+rs.getString("DESC")+"</td>\n" +
+                            "  </tr>"
+                    );
                 }
+                out.println("</table>");
             }
             catch(SQLException e){System.out.print(e.toString());}
             catch(Exception e){System.out.print(e.toString());}
@@ -71,21 +86,6 @@ public class WebWeatherDebug extends HttpServlet {
                     Logger.getLogger(WebWeatherDebug.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
-            out.println(
-            "<table style=\"width:100%\">\n" +
-            "  <tr>\n" +
-            "    <td>Jill</td>\n" +
-            "    <td>Smith</td>		\n" +
-            "    <td>50</td>\n" +
-            "  </tr>\n" +
-            "  <tr>\n" +
-            "    <td>Eve</td>\n" +
-            "    <td>Jackson</td>		\n" +
-            "    <td>94</td>\n" +
-            "  </tr>\n" +
-            "</table>"
-            );
             out.println("</body>");
             out.println("</html>");
         }
