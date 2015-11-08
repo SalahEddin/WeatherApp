@@ -51,7 +51,8 @@ public class WebWeatherDebug extends HttpServlet {
             Connection conn = null;
             try{
                 Class.forName("org.sqlite.JDBC");
-                conn = DriverManager.getConnection("jdbc:sqlite:../../WeatherDB.sqlite");
+                String Path = getServletContext().getRealPath("/WEB-INF/");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + Path + "\\WeatherDB.sqlite");
                 Statement stmt = conn.createStatement();
                 String query = "SELECT * FROM LOCATION";
                 ResultSet rs = stmt.executeQuery(query);
