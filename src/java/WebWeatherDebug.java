@@ -69,9 +69,14 @@ public class WebWeatherDebug extends HttpServlet {
                     out.println(
                             "  <tr>\n" +
                                     "<td>"+rs.getString("LAT")+"</td>\n" +
-                                    "<td>"+rs.getString("LONG")+"</td>\n" +
+                                    "<td>"+rs.getString("LNG")+"</td>\n" +
                                     "<td>"+rs.getString("NAME")+"</td>\n" +
                                     "<td>"+rs.getString("DESC")+"</td>\n" +
+                                    "<td>\n" +
+                                    "<form name=\"details\" action=\"SecondServlet\" >\n" +
+                                        "<input type=\"submit\" value=\"details\" onclick=\"form.action='SecondServle?'"+rs.getString("ID")+";\">\n"+
+                                    "</form>\n" +
+                                    "</td>\n"+
                             "  </tr>"
                     );
                 }
