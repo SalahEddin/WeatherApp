@@ -40,11 +40,16 @@ public class WebWeatherData extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet WebWeatherData</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet WebWeatherData at " + request.getContextPath() + "</h1>");
+            out.println("<head>\n" +
+                        "    <title>Details</title>\n" +
+                        "    <meta charset=\"utf-8\">\n" +
+                        "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
+                        "    <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n" +
+                        "    <link rel=\"stylesheet\" href=\"https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css\">\n" +
+                        "  </head>");
+            out.println("<body>"
+                        + "<div class=\"container-fluid\">");
+            out.println("<h1>Servlet WebWeatherData at " + request.getParameter("id")+ "</h1>");
             // Connection
             Connection conn = null;
             try{
@@ -52,17 +57,20 @@ public class WebWeatherData extends HttpServlet {
                 String Path = getServletContext().getRealPath("/WEB-INF/");
                 conn = DriverManager.getConnection("jdbc:sqlite:" + Path + "\\WeatherDB.sqlite");
                 Statement stmt = conn.createStatement();
-                String query = "SELECT * FROM DATA,LOCATION WHERE ID = LOCATION_ID";
+                String query = "SELECT * FROM DATA,LOCATION WHERE ID = LOCATION_ID AND LOCATION_ID = "+request.getParameter("id");
                 ResultSet rs = stmt.executeQuery(query);
                 out.println(
-                    "<table style=\"width:100%\">\n" +
+                    "<table class=\"table table-striped\">\n"+
+                    "<thead class=\"thead-inverse\">\n"+
                     "<tr>\n" +
-                            "<td>Temprature</td>\n" +
-                            "<td>Rain</td>\n" +
-                            "<td>Clouds</td>\n" +
-                            "<td>Wind</td>\n" +
-                            "<td>Last Update</td>\n" +
-                    "</tr>"
+                            "<th>Temprature</th>\n" +
+                            "<th>Rain</th>\n" +
+                            "<th>Clouds</th>\n" +
+                            "<th>Wind</th>\n" +
+                            "<th>Last Update</th>\n" +
+                    "</tr>\n"+
+                    "</thead>\n"+
+                    "<tbody>"
                 );  
                 while (rs.next()) {
                     out.println(
@@ -75,7 +83,8 @@ public class WebWeatherData extends HttpServlet {
                             "  </tr>"
                     );
                 }
-                out.println("</table>");
+                out.println("</tbody>\n"
+                        + "</table>");
             }
             catch(SQLException e){System.out.print(e.toString());}
             catch(Exception e){System.out.print(e.toString());}

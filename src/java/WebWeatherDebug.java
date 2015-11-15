@@ -74,7 +74,8 @@ public class WebWeatherDebug extends HttpServlet {
                             "<th>Description</th>\n" +
                             "<th>More details</th>\n" +
                     "</tr>\n"+
-                    "<thead class=\"thead-inverse\">"
+                    "</thead>\n"+
+                    "<tbody>"
                 );  
                 while (rs.next()) {
                     out.println(
@@ -84,14 +85,16 @@ public class WebWeatherDebug extends HttpServlet {
                                     "<td>"+rs.getString("NAME")+"</td>\n" +
                                     "<td>"+rs.getString("DESC")+"</td>\n" +
                                     "<td>\n" +
-                                    "<form name=\"theForm\" action=\"/WeatherApp/WebWeatherData\" method=\"post\">\n" +
+                                    "<form name=\"form"+rs.getString("ID")+"\" action=\"/WeatherApp/WebWeatherData\" method=\"POST\">\n" +
+                                        "<input type=\"hidden\" value=\""+rs.getString("ID")+"\" name=\"id\" />\n"+
                                         "<button type=\"submit\" value="+rs.getString("ID")+">details</button>\n"+
                                     "</form>\n" +
                                     "</td>\n"+
                             "  </tr>"
                     );
                 }
-                out.println("</table>");
+                out.println("</tbody>\n"
+                        + "</table>");
             }
             catch(SQLException e){System.out.print(e.toString());}
             catch(Exception e){System.out.print(e.toString());}

@@ -1,20 +1,24 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <p><a href="/WeatherApp/WebWeatherDebug">View Locations</a></p>
-        <p><a href="/WeatherApp/WebWeatherRandomise">Populate</a></p>
-        <form action="/WeatherApp/WebWeatherRandomise" method="POST">
-            <input type="submit" value="Populate with Random Data">
-        </form>
-    </body>
+<html lang="en">
+  <head>
+    <title>Home</title>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css">
+  </head>
+  <body>
+    <h1>Hello, world!</h1>
+    <p><a href="/WeatherApp/WebWeatherDebug">View Locations</a></p>
+    <p><a href="/WeatherApp/WebWeatherRandomise">Populate</a></p>
+    <form action="/WeatherApp/WebWeatherRandomise" method="POST">
+        <input type="submit" value="Populate with Random Data">
+    </form>
+    <!-- jQuery first, then Bootstrap JS. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js"></script>
+  </body>
 </html>
