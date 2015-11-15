@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -23,7 +24,11 @@ import javax.servlet.http.HttpServletResponse;
  * @author Salah
  */
 public class WebWeatherData extends HttpServlet {
-
+    
+    String easyDateFormat(String unformated){
+    String s = new SimpleDateFormat("H:mm").format(unformated);
+    return s;
+    }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
