@@ -41,10 +41,18 @@ public class WebWeatherDebug extends HttpServlet {
             
             out.println("<!DOCTYPE html>");
             out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet WebWeatherDebug</title>");
-            out.println("</head>");
-            out.println("<body>");
+            out.println("<head>\n" +
+                        "    <title>Location Selector</title>\n" +
+                        "    <!-- Required meta tags always come first -->\n" +
+                        "    <meta charset=\"utf-8\">\n" +
+                        "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
+                        "    <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n" +
+                        "\n" +
+                        "    <!-- Bootstrap CSS -->\n" +
+                        "    <link rel=\"stylesheet\" href=\"https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css\">\n" +
+                        "  </head>");
+            out.println("<body>"
+                    + "<div class=\"container-fluid\">");
             out.println("<h1>Servlet WebWeatherDebug at " + request.getContextPath() + "</h1>");
             
             // Connection
@@ -57,13 +65,16 @@ public class WebWeatherDebug extends HttpServlet {
                 String query = "SELECT * FROM LOCATION";
                 ResultSet rs = stmt.executeQuery(query);
                 out.println(
-                    "<table style=\"width:100%\">\n" +
+                    "<table class=\"table table-striped\">\n"+
+                    "<thead class=\"thead-inverse\">\n"+
                     "<tr>\n" +
-                            "<td>Latitude</td>\n" +
-                            "<td>Longitude</td>\n" +
-                            "<td>Name</td>\n" +
-                            "<td>Description</td>\n" +
-                    "</tr>"
+                            "<th>Latitude</th>\n" +
+                            "<th>Longitude</th>\n" +
+                            "<th>Name</th>\n" +
+                            "<th>Description</th>\n" +
+                            "<th>More details</th>\n" +
+                    "</tr>\n"+
+                    "<thead class=\"thead-inverse\">"
                 );  
                 while (rs.next()) {
                     out.println(
@@ -91,7 +102,11 @@ public class WebWeatherDebug extends HttpServlet {
                     Logger.getLogger(WebWeatherDebug.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            out.println("</body>");
+            out.println("</div>\n"
+                        + "<!-- jQuery first, then Bootstrap JS. -->\n" +
+                        "    <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js\"></script>\n" +
+                        "    <script src=\"https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js\"></script>\n" +
+                        "  </body>");
             out.println("</html>");
         }
         
