@@ -12,9 +12,22 @@
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.Connection"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%! 
+static String getImg(String rain,String cloud){
+    if(Integer.parseInt(cloud) < 50){ return "clear.jpg";}
+    else if(Integer.parseInt(rain) < 50){ return "cloudy.jpg";}
+    else { return "rainy.jpg";}
+}
+%>
 <!DOCTYPE html>
 <html>
     <head>
+        <style>
+            img{
+                width:100%;
+                height:auto;
+              }
+        </style>
         <title>Home</title>
         <!-- Required meta tags always come first -->
         <meta charset="utf-8">
@@ -40,7 +53,7 @@
                 while (rs.next()) {%>
                 <div class="col-sm-4">
                     <div class="card">
-                        <img class="card-img-top" data-src="holder.js/100%x180/?text=Image cap" alt="Card image cap">
+                        <img class="card-img-top" src="<%= getImg(rs.getString("RAIN"),rs.getString("CLOUD"))%>"/>
                         <div class="card-block">
                             <h4 class="card-title"><%= rs.getString("NAME")%></h4>
                             <p class="card-text"><%= rs.getString("DESC")%></p>

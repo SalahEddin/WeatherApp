@@ -32,7 +32,7 @@
 
     <servlet-mapping>
         <servlet-name>WebWeatherFav</servlet-name>
-        <url-pattern>/WebWeatherFav</url-pattern>
+        <url-pattern>/WebWeatherFav*</url-pattern>
     </servlet-mapping>
     
     <session-config>

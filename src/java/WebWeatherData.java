@@ -92,7 +92,7 @@ public class WebWeatherData extends HttpServlet {
                 }
                 out.println("</tbody>\n"
                         + "</table>");
-                Statement stmt2 = conn.createStatement();
+                //Statement stmt2 = conn.createStatement();
                 query = "SELECT * FROM LOCATION";
                 rs = stmt.executeQuery(query);
                 out.println("<div class=\"clearfix\"></div>\n" +
@@ -100,7 +100,7 @@ public class WebWeatherData extends HttpServlet {
                 "            <h5>Check more locations...</h5>\n" +
                 "            <ul class=\"list-group\">");
                 while (rs.next()) {
-                out.println("<a href=\"#\" class=\"list-group-item\">"+rs.getString("Name")+"</a>");
+                out.println("<a href=\"/WeatherApp/WebWeatherData?id="+rs.getString("ID")+"\" class=\"list-group-item\">"+rs.getString("Name")+"</a>");
                 }
                 out.println(
                         "</ul>\n" +
@@ -115,7 +115,10 @@ public class WebWeatherData extends HttpServlet {
                     Logger.getLogger(WebWeatherDebug.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            out.println("</body>");
+            out.println(
+                        "    <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js\"></script>\n" +
+                        "    <script src=\"https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js\"></script>\n" +
+                        "  </body>");
             out.println("</html>");
         }
     }

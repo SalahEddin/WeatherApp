@@ -13,13 +13,13 @@
     <body>
         <h1>Hello, world!</h1>
         <p><a href="/WeatherApp/WebWeatherDebug">View Locations</a></p>
-        <p><a href="/WeatherApp/WebWeatherRandomise">Populate</a></p>
+        <a href="/WeatherApp/WebWeatherFav.jsp">Fav</a>
         <form action="/WeatherApp/WebWeatherRandomise" method="POST">
             <input type="submit" value="Populate with Random Data">
         </form>
         <div class="col-sm-4">
             <div class="card">
-                <img class="card-img-top" data-src="holder.js/100%x180/?text=Image cap" alt="Card image cap">
+                <img class="card-img-top" data-src="clear2.jpg" alt="Card image cap">
                 <div class="card-block">
                     <h4 class="card-title">Paris</h4>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
@@ -35,6 +35,18 @@
                 </div>
             </div>
         </div>
+        <div class="clearfix"></div>
+        <div class="col-sm-2">
+            <h5>Check more locations...</h5>
+            <ul class="list-group">
+                <li class="list-group-item">Larnaca</li>
+                <li class="list-group-item">Limassol</li>
+                <li class="list-group-item">Morbi leo risus</li>
+                <li class="list-group-item">Porta ac consectetur ac</li>
+                <li class="list-group-item">Vestibulum at eros</li>
+            </ul>
+        </div>
+            
         <!-- jQuery first, then Bootstrap JS. -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
         <script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js"></script>
