@@ -35,7 +35,7 @@
                 String Path = getServletContext().getRealPath("/WEB-INF/");
                 conn = DriverManager.getConnection("jdbc:sqlite:" + Path + "\\WeatherDB.sqlite");
                 Statement stmt = conn.createStatement();
-                String query = "SELECT * FROM DATA,LOCATION WHERE ID = LOCATION_ID AND FAV = TRUE";
+                String query = "SELECT * FROM DATA,LOCATION WHERE ID = LOCATION_ID AND FAV = \"TRUE\"";
                 ResultSet rs = stmt.executeQuery(query);
                 while (rs.next()) {%>
                 <div class="col-sm-4">
