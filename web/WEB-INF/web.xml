@@ -24,6 +24,17 @@
         <servlet-name>WebWeatherRandomise</servlet-name>
         <url-pattern>/WebWeatherRandomise</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>WebWeatherFav</servlet-name>
+        <jsp-file>/WebWeatherFav.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>WebWeatherFav</servlet-name>
+        <url-pattern>/WebWeatherFav</url-pattern>
+    </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30
