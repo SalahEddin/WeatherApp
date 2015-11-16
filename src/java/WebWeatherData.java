@@ -42,7 +42,7 @@ public class WebWeatherData extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+            /* Header imports Bootstrap */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>\n" +
@@ -52,12 +52,14 @@ public class WebWeatherData extends HttpServlet {
                         "    <meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n" +
                         "    <link rel=\"stylesheet\" href=\"https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css\">\n" +
                         "  </head>");
+            // define reponsive page
             out.println("<body>"
                         + "<div class=\"container-fluid\">");
             out.println("<h1>Servlet WebWeatherData at " + request.getParameter("id")+ "</h1>");
             // Connection
             Connection conn = null;
             try{
+                // DB Connection
                 Class.forName("org.sqlite.JDBC");
                 String Path = getServletContext().getRealPath("/WEB-INF/");
                 conn = DriverManager.getConnection("jdbc:sqlite:" + Path + "\\WeatherDB.sqlite");
@@ -90,6 +92,19 @@ public class WebWeatherData extends HttpServlet {
                 }
                 out.println("</tbody>\n"
                         + "</table>");
+                Statement stmt2 = conn.createStatement();
+                query = "SELECT * FROM LOCATION";
+                rs = stmt.executeQuery(query);
+                out.println("<div class=\"clearfix\"></div>\n" +
+                "        <div class=\"col-sm-2\">\n" +
+                "            <h5>Check more locations...</h5>\n" +
+                "            <ul class=\"list-group\">");
+                while (rs.next()) {
+                out.println("<a href=\"#\" class=\"list-group-item\">"+rs.getString("Name")+"</a>");
+                }
+                out.println(
+                        "</ul>\n" +
+            "        </div>");
             }
             catch(SQLException e){System.out.print(e.toString());}
             catch(Exception e){System.out.print(e.toString());}
