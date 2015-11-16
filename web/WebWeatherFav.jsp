@@ -42,14 +42,14 @@
                     <div class="card">
                         <img class="card-img-top" data-src="holder.js/100%x180/?text=Image cap" alt="Card image cap">
                         <div class="card-block">
-                            <h4 class="card-title"><%rs.getString("NAME");%></h4>
-                            <p class="card-text"><%rs.getString("DESC");%></p>
+                            <h4 class="card-title"><%= rs.getString("NAME")%></h4>
+                            <p class="card-text"><%= rs.getString("DESC")%></p>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Temperature: <%rs.getString("TEMP");%></li>
-                            <li class="list-group-item">Rain Chance: <%rs.getString("RAIN");%></li>
-                            <li class="list-group-item">Clouds: <%rs.getString("CLOUD");%></li>
-                            <li class="list-group-item">Wind: <%rs.getString("WIND");%></li>
+                            <li class="list-group-item">Temperature: <%=rs.getString("TEMP")%></li>
+                            <li class="list-group-item">Rain Chance: <%=rs.getString("RAIN")%></li>
+                            <li class="list-group-item">Clouds: <%=rs.getString("CLOUD")%></li>
+                            <li class="list-group-item">Wind: <%=rs.getString("WIND")%></li>
                         </ul>
                         <div class="card-block">
                             <a href="#" class="card-link">Card link</a>
