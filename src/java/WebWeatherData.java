@@ -24,11 +24,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author Salah
  */
 public class WebWeatherData extends HttpServlet {
-    
-    String easyDateFormat(String unformated){
-        String s = new SimpleDateFormat("H:mm").format(unformated);
-        return s;
-    }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -88,7 +83,7 @@ public class WebWeatherData extends HttpServlet {
                                     "<td>"+rs.getString("RAIN")+"</td>\n" +
                                     "<td>"+rs.getString("CLOUD")+"</td>\n" +
                                     "<td>"+rs.getString("WIND")+"</td>\n" +
-                                    "<td>"+rs.getString("UPDATED")+"</td>\n" +
+                                    "<td>"+new SimpleDateFormat("yyyy‐MM‐dd kk:mm:ss").format(rs.getDate("UPDATED"))+"</td>\n" +
                                     "  </tr>"
                     );
                 }
