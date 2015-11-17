@@ -39,7 +39,10 @@ static String getImg(String rain,String cloud){
     </head>
     <body>
         <h1>Hello World!</h1>
-        <% 
+        <%
+            Cookie[] cookies = null;
+            // Get an array of Cookies associated with this domain
+            cookies = request.getCookies();
             // Connection
             Connection conn = null;
             try{
@@ -48,9 +51,17 @@ static String getImg(String rain,String cloud){
                 String Path = getServletContext().getRealPath("/WEB-INF/");
                 conn = DriverManager.getConnection("jdbc:sqlite:" + Path + "\\WeatherDB.sqlite");
                 Statement stmt = conn.createStatement();
-                String query = "SELECT * FROM DATA,LOCATION WHERE ID = LOCATION_ID AND FAV = \"TRUE\"";
+                String query = "SELECT * FROM DATA,LOCATION WHERE ID = LOCATION_ID";
                 ResultSet rs = stmt.executeQuery(query);
-                while (rs.next()) {%>
+                while (rs.next()) {
+                    boolean isFav = false;
+                    for (int i = 0; i < cookies.length; i++){
+                    // TODO check getName of cookie as well                        
+                    // cookie is favourite
+                        if(cookies[i].getValue().equals(rs.getString("ID"))) {isFav = true;}
+                     }
+                    if(!isFav) continue; // not a favourite, go to next in result set
+        %>
                 <div class="col-sm-4">
                     <div class="card">
                         <img class="card-img-top" src="<%= getImg(rs.getString("RAIN"),rs.getString("CLOUD"))%>"/>
