@@ -12,6 +12,10 @@
         <servlet-name>WebWeatherRandomise</servlet-name>
         <servlet-class>WebWeatherRandomise</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>WebAddToFav</servlet-name>
+        <servlet-class>WebAddToFav</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>WebWeatherDebug</servlet-name>
         <url-pattern>/WebWeatherDebug</url-pattern>
@@ -24,17 +28,18 @@
         <servlet-name>WebWeatherRandomise</servlet-name>
         <url-pattern>/WebWeatherRandomise</url-pattern>
     </servlet-mapping>
-    
     <servlet>
         <servlet-name>WebWeatherFav</servlet-name>
         <jsp-file>/WebWeatherFav.jsp</jsp-file>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>WebWeatherFav</servlet-name>
         <url-pattern>/WebWeatherFav*</url-pattern>
     </servlet-mapping>
-    
+    <servlet-mapping>
+        <servlet-name>WebAddToFav</servlet-name>
+        <url-pattern>/WebAddToFav</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
