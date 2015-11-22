@@ -83,7 +83,8 @@ public class WebWeatherData extends HttpServlet {
                                     "<td>"+rs.getString("RAIN")+"</td>\n" +
                                     "<td>"+rs.getString("CLOUD")+"</td>\n" +
                                     "<td>"+rs.getString("WIND")+"</td>\n" +
-                                    "<td>"+new SimpleDateFormat("yyyy‐MM‐dd kk:mm:ss").format(rs.getDate("UPDATED"))+"</td>\n" +
+                                    "<td>"+rs.getString("UPDATED")+"</td>\n" +
+                                    /*"<td>"+new SimpleDateFormat("yyyy‐MM‐dd kk:mm:ss").format(rs.getDate("UPDATED"))+"</td>\n" +*/
                                     "  </tr>"
                     );
                 }
