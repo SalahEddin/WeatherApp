@@ -32,7 +32,13 @@ public class WebAddToFav extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             String favID = request.getParameter("add");
+            String homeID = request.getParameter("home");
             if(favID != null){
+                Cookie newCookie = new Cookie(favID, favID);
+                newCookie.setMaxAge(60*60*24);
+                response.addCookie(newCookie);
+            }
+            else if(homeID != null){
                 Cookie newCookie = new Cookie("Home", favID);
                 newCookie.setMaxAge(60*60*24);
                 response.addCookie(newCookie);

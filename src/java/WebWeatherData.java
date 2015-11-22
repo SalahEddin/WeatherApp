@@ -93,7 +93,12 @@ public class WebWeatherData extends HttpServlet {
                 // add to favourites
                 out.println("<form name=\"favForm\" action=\"/WeatherApp/WebAddToFav\" method=\"POST\">\n" +
                         "<input type=\"hidden\" value=\""+locID+"\" name=\"add\" />\n"+
-                        "<button class=\"btn btn-primary\" type=\"submit\">details</button>\n"+
+                        "<button class=\"btn btn-primary\" type=\"submit\">Add to favourites</button>\n"+
+                        "</form>");
+                // add new home page
+                out.println("<form name=\"homeForm\" action=\"/WeatherApp/WebAddToFav\" method=\"POST\">\n" +
+                        "<input type=\"hidden\" value=\""+locID+"\" name=\"home\" />\n"+
+                        "<button class=\"btn btn-primary\" type=\"submit\">Set as Home</button>\n"+
                         "</form>");
                 // list group for quick access to other locations
                 query = "SELECT * FROM LOCATION";

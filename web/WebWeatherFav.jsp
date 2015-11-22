@@ -56,9 +56,9 @@ static String getImg(String rain,String cloud){
                 while (rs.next()) {
                     boolean isFav = false;
                     for (int i = 0; i < cookies.length; i++){
-                    // TODO check getName of cookie as well                        
                     // cookie is favourite
-                        if(cookies[i].getValue().equals(rs.getString("ID"))) {isFav = true;}
+                    String resultId = rs.getString("ID");
+                        if(cookies[i].getName().equals(resultId) && cookies[i].getValue().equals(resultId)) {isFav = true;}
                      }
                     if(!isFav) continue; // not a favourite, go to next in result set
         %>
