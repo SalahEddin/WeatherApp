@@ -91,20 +91,20 @@ public class WebWeatherData extends HttpServlet {
                 out.println("</tbody>\n"
                         + "</table>");
                 // add to favourites
-                out.println("<form name=\"favForm\" action=\"/WeatherApp/WebAddToFav\" method=\"POST\">\n" +
+                out.println("<div class=\"col-sm-4\"><form name=\"favForm\" action=\"/WeatherApp/WebAddToFav\" method=\"POST\">\n" +
                         "<input type=\"hidden\" value=\""+locID+"\" name=\"add\" />\n"+
-                        "<button class=\"btn btn-primary\" type=\"submit\">Add to favourites</button>\n"+
-                        "</form>");
+                        "<button class=\"btn btn-secondary\" type=\"submit\">Add to favourites</button>\n"+
+                        "</form></div>");
                 // add new home page
-                out.println("<form name=\"homeForm\" action=\"/WeatherApp/WebAddToFav\" method=\"POST\">\n" +
+                out.println("<div class=\"col-sm-4\"><form name=\"homeForm\" action=\"/WeatherApp/WebAddToFav\" method=\"POST\">\n" +
                         "<input type=\"hidden\" value=\""+locID+"\" name=\"home\" />\n"+
                         "<button class=\"btn btn-primary\" type=\"submit\">Set as Home</button>\n"+
-                        "</form>");
+                        "</form></div>");
                 // list group for quick access to other locations
                 query = "SELECT * FROM LOCATION";
                 rs = stmt.executeQuery(query);
                 out.println("<div class=\"clearfix\"></div>\n" +
-                        "        <div class=\"col-sm-2\">\n" +
+                        "        <div class=\"col-sm-4\">\n" +
                         "            <h5>Check more locations...</h5>\n" +
                         "            <ul class=\"list-group\">");
                 while (rs.next()) {

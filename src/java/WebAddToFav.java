@@ -39,7 +39,7 @@ public class WebAddToFav extends HttpServlet {
                 response.addCookie(newCookie);
             }
             else if(homeID != null){
-                Cookie newCookie = new Cookie("Home", favID);
+                Cookie newCookie = new Cookie("Home", homeID);
                 newCookie.setMaxAge(60*60*24);
                 response.addCookie(newCookie);
             }

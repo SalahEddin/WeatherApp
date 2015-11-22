@@ -49,7 +49,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>index</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/index</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
