@@ -67,7 +67,7 @@ public class WebWeatherData extends HttpServlet {
                         "<table class=\"table table-striped\">\n"+
                                 "<thead class=\"thead-inverse\">\n"+
                                 "<tr>\n" +
-                                "<th>Temprature</th>\n" +
+                                "<th>Temperature</th>\n" +
                                 "<th>Rain</th>\n" +
                                 "<th>Clouds</th>\n" +
                                 "<th>Wind</th>\n" +

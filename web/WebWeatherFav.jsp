@@ -38,7 +38,6 @@ static String getImg(String rain,String cloud){
         <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css">
     </head>
     <body>
-        <h1>Hello World!</h1>
         <%
             Cookie[] cookies = null;
             // Get an array of Cookies associated with this domain
