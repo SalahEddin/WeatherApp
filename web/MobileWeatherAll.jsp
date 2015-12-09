@@ -44,8 +44,7 @@
                 %>
                 <table class= table table-striped>
                     <thead class="thead-inverse">
-                        <th>Latitude</th>
-                        <th>Longitude</th>
+                        <th>Lat/ Lng</th>
                         <th>Name</th>
                         <th>Description</th>
                         <th>More details</th>
@@ -55,8 +54,7 @@
                 while (rs.next()) {
         %>
                         <tr>
-                            <td><%= rs.getString("LAT") %></td>
-                            <td><%= rs.getString("LNG")%></td>
+                            <td><%= rs.getString("LAT") %>,<%= rs.getString("LNG")%></td>
                             <td><%= rs.getString("NAME")%></td>
                             <td><%= rs.getString("DESC")%></td>
                             <td>

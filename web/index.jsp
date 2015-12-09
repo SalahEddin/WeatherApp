@@ -54,9 +54,6 @@ static String getImg(String rain,String cloud){
                             <a class="nav-link" href="/WeatherApp/WebWeatherDebug">Locations</a>
                         </li>
                     </ul>
-                            <form action="/WeatherApp/WebWeatherRandomise" method="POST" class="form-inline navbar-form pull-right">
-                                <button class="btn btn-secondary" type="submit">Randomise Weather Values</button>
-                            </form>
                 </div>
             </nav>
         </div>

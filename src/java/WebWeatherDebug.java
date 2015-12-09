@@ -52,9 +52,7 @@ public class WebWeatherDebug extends HttpServlet {
                     "    <link rel=\"stylesheet\" href=\"https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css\">\n" +
                     "  </head>");
             out.println("<body>"
-                    + "<div class=\"container-fluid\">");
-            out.println("<h1>Servlet WebWeatherDebug at " + request.getContextPath() + "</h1>");
-            
+                    + "<div class=\"container-fluid\">");            
             // Connection
             Connection conn = null;
             try{
@@ -105,6 +103,9 @@ public class WebWeatherDebug extends HttpServlet {
                     Logger.getLogger(WebWeatherDebug.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            out.println("<form action=\"/WeatherApp/WebWeatherRandomise\" method=\"POST\" class=\"form-inline navbar-form pull-right\">\n" +
+"                           <button class=\"btn btn-secondary\" type=\"submit\">Randomise Weather Values</button>\n" +
+"                       </form>");
             out.println("</div>\n"
                     + "<!-- jQuery first, then Bootstrap JS. -->\n" +
                     "    <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js\"></script>\n" +

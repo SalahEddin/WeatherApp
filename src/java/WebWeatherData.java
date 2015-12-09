@@ -52,7 +52,6 @@ public class WebWeatherData extends HttpServlet {
             // define reponsive page
             out.println("<body>"
                     + "<div class=\"container-fluid\">");
-            out.println("<h1>Servlet WebWeatherData at " + locID + "</h1>");
             // Connection
             Connection conn = null;
             try{
