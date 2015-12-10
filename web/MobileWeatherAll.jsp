@@ -44,7 +44,7 @@
                 %>
                 <table class= table table-striped>
                     <thead class="thead-inverse">
-                        <th>Lat/ Lng</th>
+                        <th>Lat/ Lng</th> <!-- combined to fit on a mobile screen -->
                         <th>Name</th>
                         <th>Description</th>
                         <th>More details</th>

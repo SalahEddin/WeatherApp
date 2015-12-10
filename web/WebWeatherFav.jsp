@@ -54,10 +54,14 @@ static String getImg(String rain,String cloud){
                 ResultSet rs = stmt.executeQuery(query);
                 while (rs.next()) {
                     boolean isFav = false;
+                    String resultId = rs.getString("ID");
+                    
                     for (int i = 0; i < cookies.length; i++){
                     // cookie is favourite
-                    String resultId = rs.getString("ID");
-                        if(cookies[i].getName().equals(resultId) && cookies[i].getValue().equals(resultId)) {isFav = true;}
+                        if(cookies[i].getName().equals(resultId) && cookies[i].getValue().equals(resultId)) {
+                            isFav = true;
+                            break; // no need to traverse through the rest of the cookies
+                        }
                      }
                     if(!isFav) continue; // not a favourite, go to next in result set
         %>
@@ -74,10 +78,6 @@ static String getImg(String rain,String cloud){
                             <li class="list-group-item">Clouds: <%=rs.getString("CLOUD")%></li>
                             <li class="list-group-item">Wind: <%=rs.getString("WIND")%></li>
                         </ul>
-                        <div class="card-block">
-                            <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a>
-                        </div>
                     </div>
                 </div>
                 <%
