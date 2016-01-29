@@ -1,12 +1,17 @@
 package com.ultimatecode.tabbedultiweaather;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.databinding.tool.Binding;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.StringDef;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.ultimatecode.tabbedultiweaather.databinding.FragmentDetailedBinding;
 
 
 /**
@@ -59,8 +64,15 @@ public class DetailedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_detailed, container, false);
+
+        FragmentDetailedBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detailed, container, false);
+        WeatherItem homeCity = new WeatherItem();
+        homeCity.CityName = "Wowville";
+        homeCity.Clouds = "30";
+        binding.setHomeCity(homeCity);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detailed, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -100,5 +112,15 @@ public class DetailedFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public class WeatherItem {
+        public String CityName;
+        public String CityLon;
+        public String CityLat;
+        public String Temp;
+        public String Rain;
+        public String Wind;
+        public String Clouds;
     }
 }
