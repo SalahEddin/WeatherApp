@@ -30,6 +30,7 @@ public class ListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private ListView listView;
     private OnFragmentInteractionListener mListener;
 
     public ListFragment() {
@@ -58,7 +59,6 @@ public class ListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //TODO
-        //ListView listView = (ListView) findViewById(R.id.citiesListView);
 //        if (getArguments() != null) {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
@@ -68,8 +68,12 @@ public class ListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        // for fragments, findview here
+        listView = (ListView) view.findViewById(R.id.citiesListView);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
