@@ -1,13 +1,20 @@
 package com.ultimatecode.tabbedultiweaather;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -70,6 +77,29 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         // for fragments, findview here
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Delete Larnaka city?")
+                .setMessage("Laranaka is sad, but you can add it again later")
+                .setIcon(android.R.drawable.ic_delete)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // Toast.makeText(ListFragment.this, "Yaay", Toast.LENGTH_SHORT).show();
+                    }})
+                .setNegativeButton(android.R.string.no, null).show();
+
+//        Button addButton = (Button) view.findViewById(R.id.Addfab);
+//        addButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Snackbar snack = Snackbar.make(v, "Laranaka was deleted", Snackbar.LENGTH_LONG);
+//                View snackView = snack.getView();
+//                FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
+//                params.gravity = Gravity.TOP;
+//                snackView.setLayoutParams(params);
+//                snack.show();
+//            }
+//        });
         listView = (ListView) view.findViewById(R.id.citiesListView);
         // Inflate the layout for this fragment
         return view;

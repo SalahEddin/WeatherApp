@@ -1,8 +1,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context="com.ultimatecode.tabbedultiweaather.DetailedFragment">
 
     <data>
@@ -12,7 +10,9 @@
             type="com.ultimatecode.tabbedultiweaather.DetailedFragment.WeatherItem" />
     </data>
 
-    <ScrollView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{homeCity.CityName, default=PLACEHOLDER}"
+                            android:text="@{homeCity.CityName, default=Nicsoia}"
                             android:textSize="22sp" />
 
                         <TextView
@@ -65,7 +65,7 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="bottom|end"
+                            android:gravity="bottom"
                             android:orientation="horizontal">
 
                             <Button
