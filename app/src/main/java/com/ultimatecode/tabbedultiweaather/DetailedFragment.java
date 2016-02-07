@@ -10,6 +10,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.ultimatecode.tabbedultiweaather.databinding.FragmentDetailedBinding;
 
@@ -64,13 +67,9 @@ public class DetailedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // get the view
         View view = inflater.inflate(R.layout.fragment_detailed, container, false);
 
-        FragmentDetailedBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detailed, container, false);
-        WeatherItem homeCity = new WeatherItem();
-        homeCity.CityName = "Wowville";
-        homeCity.Clouds = "30";
-        binding.setHomeCity(homeCity);
         // Inflate the layout for this fragment
         return view;
     }
@@ -115,12 +114,12 @@ public class DetailedFragment extends Fragment {
     }
 
     public class WeatherItem {
-        public String CityName;
-        public String CityLon;
-        public String CityLat;
-        public String Temp;
-        public String Rain;
-        public String Wind;
-        public String Clouds;
+        public final String CityName;
+        public final String Clouds;
+
+        public WeatherItem(String cityName, String clouds) {
+            CityName = cityName;
+            Clouds = clouds;
+        }
     }
 }

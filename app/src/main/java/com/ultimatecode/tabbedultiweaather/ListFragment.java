@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -76,17 +77,25 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
-        // for fragments, findview here
-        new AlertDialog.Builder(getActivity())
-                .setTitle("Delete Larnaka city?")
-                .setMessage("Laranaka is sad, but you can add it again later")
-                .setIcon(android.R.drawable.ic_delete)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        // Toast.makeText(ListFragment.this, "Yaay", Toast.LENGTH_SHORT).show();
-                    }})
-                .setNegativeButton(android.R.string.no, null).show();
+        // for fragments, findview here
+        ListView citiesListView = (ListView) view.findViewById(R.id.citiesListView);
+
+        citiesListView.setAdapter(new ArrayAdapter<>(
+                getActivity().getApplicationContext(),
+                android.R.layout.simple_list_item_1,
+                CityWeather.DummyWeatherInfo));
+
+//        new AlertDialog.Builder(getActivity())
+//                .setTitle("Delete Larnaka city?")
+//                .setMessage("Laranaka is sad, but you can add it again later")
+//                .setIcon(android.R.drawable.ic_delete)
+//                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//
+//                    public void onClick(DialogInterface dialog, int whichButton) {
+//                        // Toast.makeText(ListFragment.this, "Yaay", Toast.LENGTH_SHORT).show();
+//                    }})
+//                .setNegativeButton(android.R.string.no, null).show();
 
 //        Button addButton = (Button) view.findViewById(R.id.Addfab);
 //        addButton.setOnClickListener(new View.OnClickListener() {
