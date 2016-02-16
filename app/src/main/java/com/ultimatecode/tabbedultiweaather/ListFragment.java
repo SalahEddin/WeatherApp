@@ -2,8 +2,12 @@ package com.ultimatecode.tabbedultiweaather;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -11,13 +15,19 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.ultimatecode.tabbedultiweaather.database.MyDatabaseOpenHelper;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.StringTokenizer;
 
 
 /**
@@ -38,7 +48,7 @@ public class ListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private ListView listView;
+    private ListView citiesListView;
     private OnFragmentInteractionListener mListener;
 
     public ListFragment() {
@@ -78,40 +88,78 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-        // for fragments, findview here
-        ListView citiesListView = (ListView) view.findViewById(R.id.citiesListView);
 
-        citiesListView.setAdapter(new ArrayAdapter<>(
-                getActivity().getApplicationContext(),
-                android.R.layout.simple_list_item_1,
-                CityWeather.DummyWeatherInfo));
+        FloatingActionButton addCityButton = (FloatingActionButton) view.findViewById(R.id.fabAdd);
+        // event listener to launch the activity to add a new city
+        addCityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // create an intent which calls for starting the InformationCenterActivity
+                Intent intent = new Intent(getContext(), AddCityActivity.class);
+                // use the intent to start the pointed activity
+                startActivity(intent);
+            }
+        });
 
-//        new AlertDialog.Builder(getActivity())
-//                .setTitle("Delete Larnaka city?")
-//                .setMessage("Laranaka is sad, but you can add it again later")
-//                .setIcon(android.R.drawable.ic_delete)
-//                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-//
-//                    public void onClick(DialogInterface dialog, int whichButton) {
-//                        // Toast.makeText(ListFragment.this, "Yaay", Toast.LENGTH_SHORT).show();
-//                    }})
-//                .setNegativeButton(android.R.string.no, null).show();
-
-//        Button addButton = (Button) view.findViewById(R.id.Addfab);
-//        addButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Snackbar snack = Snackbar.make(v, "Laranaka was deleted", Snackbar.LENGTH_LONG);
-//                View snackView = snack.getView();
-//                FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
-//                params.gravity = Gravity.TOP;
-//                snackView.setLayoutParams(params);
-//                snack.show();
-//            }
-//        });
-        listView = (ListView) view.findViewById(R.id.citiesListView);
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        // for fragments, findViewById here
+        citiesListView = (ListView) getView().findViewById(R.id.citiesListView);
+
+        // we first need a database open helper to even touch the DB...
+        MyDatabaseOpenHelper dboh = new MyDatabaseOpenHelper(getContext());
+        // we then get a readable handler to the DB...
+        SQLiteDatabase db = dboh.getReadableDatabase();
+        // and then we run a raw SQL query which returns a cursor pointing to the results
+        Cursor cursor = db.rawQuery("SELECT * FROM cities", null);
+
+        // number of rows in the result set
+        int numOfRows = cursor.getCount();
+
+        // initialise with dummy element TODO
+
+        final List<String> cities = new ArrayList<>();
+
+        // if DB holds elements
+        if (numOfRows > 0) {
+
+            cursor.moveToFirst();
+            int columnNameIndex = cursor.getColumnIndex("NAME");
+
+            for (int i = 0; i < numOfRows; i++) {
+                cities.add(cursor.getString(columnNameIndex));
+                cursor.moveToNext();
+            }
+            // sort alphabetically
+            Collections.sort(cities);
+        } else {
+            cities.add("Nicosia");
+        }
+
+        cursor.close();
+
+        // build adapter
+        ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(
+                getContext(),
+                android.R.layout.simple_list_item_1,
+                cities);
+
+        citiesListView.setAdapter(cityAdapter);
+
+        citiesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getContext(), DetailedActivity.class);
+                intent.putExtra("city", cities.get(position));
+                startActivity(intent);
+
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

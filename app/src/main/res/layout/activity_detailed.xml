@@ -1,9 +1,14 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.ultimatecode.tabbedultiweaather.DetailedFragment">
-
-    <data></data>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.ultimatecode.tabbedultiweaather.DetailedActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -12,8 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
             <android.support.v7.widget.CardView
                 android:id="@+id/main_card_view"
@@ -47,6 +51,7 @@
                         android:padding="12dp">
 
                         <TextView
+                            android:id="@+id/cityName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Nicsoia"
@@ -164,5 +169,4 @@
             </android.support.v7.widget.CardView>
         </LinearLayout>
     </ScrollView>
-
-</layout>
+</LinearLayout>

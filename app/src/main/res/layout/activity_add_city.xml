@@ -17,11 +17,13 @@
         android:paddingBottom="40dp"/>
 
     <AutoCompleteTextView
+        android:id="@+id/cityNameTextbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="New York" />
 
     <CheckBox
+        android:id="@+id/homeCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Set as my home"
@@ -29,6 +31,7 @@
         android:checked="false" />
 
     <Button
+        android:id="@+id/addCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add city"
