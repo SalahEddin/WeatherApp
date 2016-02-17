@@ -27,9 +27,9 @@ public class AddCityActivity extends AppCompatActivity {
                 // TODO confirm city exist
                 if(true){
                     // we first need a database open helper to even touch the DB...
-                    MyDatabaseOpenHelper dboh = new MyDatabaseOpenHelper(getBaseContext());
+                    MyDatabaseOpenHelper dbHelper = new MyDatabaseOpenHelper(getBaseContext());
                     // we then get a readable handler to the DB...
-                    SQLiteDatabase db = dboh.getReadableDatabase();
+                    SQLiteDatabase db = dbHelper.getReadableDatabase();
 
                     //TODO check if it exists in DB
 

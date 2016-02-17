@@ -11,16 +11,16 @@ public class CityWeather {
     private final String temp;
     private final String cloud;
     private final String wind;
-    private final String rain;
+    private final String humidity;
 
-    public CityWeather(String id, String name, String desc, String temp, String cloud, String wind, String rain) {
+    public CityWeather(String id, String name, String desc, String temp, String cloud, String wind, String humidity) {
         this.id = id;
         this.name = name;
         this.desc = desc;
         this.temp = temp;
         this.cloud = cloud;
         this.wind = wind;
-        this.rain = rain;
+        this.humidity = humidity;
     }
 
     @Override
@@ -52,14 +52,11 @@ public class CityWeather {
         return wind;
     }
 
-    public String getRain() {
-        return rain;
+    public String getHumidity() {
+        return humidity;
     }
 
-    // static array
-    public static final CityWeather[] DummyWeatherInfo = new CityWeather[]{
-            new CityWeather("1", "New York", "Sunny", "30", "11", "2", "80"),
-            new CityWeather("2", "Boston", "rainy", "32", "13", "12", "30"),
-            new CityWeather("3", "Moscow", "snow", "-32", "-13", "-12", "-30")
-    };
+
 }
+
+
