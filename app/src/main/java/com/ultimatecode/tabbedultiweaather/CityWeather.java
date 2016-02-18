@@ -5,7 +5,6 @@ package com.ultimatecode.tabbedultiweaather;
  * This class will hold the data received from OpenWeatherAPI
  */
 public class CityWeather {
-    private final String id;
     private final String name;
     private final String desc;
     private final String temp;
@@ -13,8 +12,7 @@ public class CityWeather {
     private final String wind;
     private final String humidity;
 
-    public CityWeather(String id, String name, String desc, String temp, String cloud, String wind, String humidity) {
-        this.id = id;
+    public CityWeather(String name, String desc, String temp, String cloud, String wind, String humidity) {
         this.name = name;
         this.desc = desc;
         this.temp = temp;
@@ -26,10 +24,6 @@ public class CityWeather {
     @Override
     public String toString() {
         return name;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getName() {

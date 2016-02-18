@@ -1,20 +1,21 @@
 package com.ultimatecode.tabbedultiweaather;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
-import android.databinding.tool.Binding;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.StringDef;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.ultimatecode.tabbedultiweaather.databinding.FragmentDetailedBinding;
+import java.io.IOException;
 
 
 /**
@@ -26,6 +27,17 @@ import com.ultimatecode.tabbedultiweaather.databinding.FragmentDetailedBinding;
  * create an instance of this fragment.
  */
 public class DetailedFragment extends Fragment {
+
+    private TextView cityNameTextView;
+    private TextView descTextView;
+    private TextView windValTextView;
+    private TextView cloudsValTextView;
+    private TextView humidityValTextView;
+    private TextView tempValTextView;
+    private ImageView cityWeatherImg;
+    private Button mapBtn;
+    private Button wikiBtn;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -70,9 +82,107 @@ public class DetailedFragment extends Fragment {
         // get the view
         View view = inflater.inflate(R.layout.fragment_detailed, container, false);
 
+        // Bind vars to UI elements
+        cityNameTextView = (TextView) view.findViewById(R.id.frag_cityName);
+        descTextView = (TextView) view.findViewById(R.id.frag_weatherDesc);
+        windValTextView = (TextView) view.findViewById(R.id.frag_wind);
+        cloudsValTextView = (TextView) view.findViewById(R.id.frag_clouds);
+        humidityValTextView = (TextView) view.findViewById(R.id.frag_humidity);
+        tempValTextView = (TextView) view.findViewById(R.id.frag_temp);
+
+        mapBtn = (Button) view.findViewById(R.id.frag_mapBtn);
+        wikiBtn = (Button) view.findViewById(R.id.frag_wikiBtn);
+
+        cityWeatherImg = (ImageView) view.findViewById(R.id.frag_weatherImg);
+
         // Inflate the layout for this fragment
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //// get home city
+
+        // First, access the shared preferences object, used for reading and writing
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        // Read a value (i.e. a boolean) using a self-defined key (e.g. '"laserShield")
+        final String homeCityName = sharedPreferences.getString("home", "Banana");
+
+        setButtonsListeners(homeCityName);
+
+        String url = Utils.CreateWeatherUrl(homeCityName.trim());
+        // contact API
+        new DownloadWeatherTask().execute(url);
+
+        cityNameTextView.setText(homeCityName);
+    }
+
+    // Sets the button functionality to open Wiki page and Map app
+    private void setButtonsListeners(final String homeCityName) {
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri gmmIntentUri = Uri.parse("http://maps.google.co.in/maps?q=" + homeCityName);
+                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                // Make the Intent explicit by setting the Google Maps package
+                mapIntent.setPackage("com.google.android.apps.maps");
+
+                // Attempt to start an activity that can handle the Intent
+                startActivity(mapIntent);
+            }
+        });
+
+        wikiBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://en.wikipedia.org/wiki/" + homeCityName.trim().replace(" ", "_");
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
+    }
+
+    private class DownloadWeatherTask extends AsyncTask<String, Void, CityWeather> {
+        @Override
+        protected CityWeather doInBackground(String... urls) {
+            // execute in background, in separate thread – cannot edit the UI
+            // call the method that connects and fetches the data and return the reply
+            String jsonRes = null;
+            try {
+                jsonRes = Utils.downloadUrl(urls[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return Utils.ProcessWeatherResponse(jsonRes);
+        }
+
+        @Override
+        protected void onPostExecute(CityWeather result) {
+
+            // finally, update the TextView accordingly
+            String tempString = Utils.getDotlessString(result.getTemp());
+            String tempText = tempString + " \u2103";
+            String windText = result.getWind() + " km/h";
+            String cloudsText = result.getCloud() + " %";
+            String humidityText = result.getHumidity() + "%";
+
+            tempValTextView.setText(tempText);
+            windValTextView.setText(windText);
+            cloudsValTextView.setText(cloudsText);
+            humidityValTextView.setText(humidityText);
+            descTextView.setText(result.getDesc());
+
+            cityWeatherImg.setImageBitmap(
+                    Utils.decodeSampledBitmapFromResource(getResources(), R.drawable.stormloop, 230, 230));
+        }
+
+
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -111,15 +221,5 @@ public class DetailedFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    public class WeatherItem {
-        public final String CityName;
-        public final String Clouds;
-
-        public WeatherItem(String cityName, String clouds) {
-            CityName = cityName;
-            Clouds = clouds;
-        }
     }
 }

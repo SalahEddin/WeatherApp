@@ -88,7 +88,6 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
-
         FloatingActionButton addCityButton = (FloatingActionButton) view.findViewById(R.id.fabAdd);
         // event listener to launch the activity to add a new city
         addCityButton.setOnClickListener(new View.OnClickListener() {
@@ -138,7 +137,7 @@ public class ListFragment extends Fragment {
             // sort alphabetically
             Collections.sort(cities);
         } else {
-            cities.add("Nicosia");
+            cities.add("Nicosia"); //// TODO: 18/02/16 prompt to add cities
         }
 
         cursor.close();
