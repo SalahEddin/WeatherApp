@@ -1,7 +1,6 @@
 package com.ultimatecode.tabbedultiweaather;
 
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.ultimatecode.tabbedultiweaather.database.MyDatabaseOpenHelper;
 
@@ -22,7 +22,8 @@ public class AddCityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_city);
 
-        final AutoCompleteTextView cityName = (AutoCompleteTextView) findViewById(R.id.cityNameTextbox);
+        final AutoCompleteTextView cityName =
+                (AutoCompleteTextView) findViewById(R.id.cityNameTextbox);
 
         Button addButton = (Button) findViewById(R.id.addCity);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -34,7 +35,8 @@ public class AddCityActivity extends AppCompatActivity {
                 // confirm city exist
                 Boolean exists = false;
                 try {
-                    exists = new CityWeatherExistsTask().execute(Utils.CreateWeatherUrl(submittedName)).get();
+                    exists = new CityWeatherExistsTask().execute(
+                            Utils.CreateWeatherUrl(submittedName)).get();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {
@@ -56,7 +58,9 @@ public class AddCityActivity extends AppCompatActivity {
                     finish();
                 }
                 else{
-                    //TODO notify user
+                    CharSequence msg = "Just like unicorns... \n" + submittedName + " does not exist";
+                    Toast.makeText(AddCityActivity.this, msg, Toast.LENGTH_LONG).show();
+
                 }
             }
         });
@@ -74,7 +78,7 @@ public class AddCityActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return Utils.Exists(jsonRes);
+            return Utils.ExistsResponse(jsonRes);
         }
 
         @Override

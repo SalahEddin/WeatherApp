@@ -11,23 +11,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.ultimatecode.tabbedultiweaather.database.MyDatabaseOpenHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.StringTokenizer;
 
 
 /**
@@ -39,16 +35,8 @@ import java.util.StringTokenizer;
  * create an instance of this fragment.
  */
 public class ListFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private ListView citiesListView;
+    private Context fragContext;
     private OnFragmentInteractionListener mListener;
 
     public ListFragment() {
@@ -67,8 +55,6 @@ public class ListFragment extends Fragment {
     public static ListFragment newInstance(String param1, String param2) {
         ListFragment fragment = new ListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -76,16 +62,12 @@ public class ListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        fragContext = getContext();
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
         FloatingActionButton addCityButton = (FloatingActionButton) view.findViewById(R.id.fabAdd);
@@ -105,15 +87,15 @@ public class ListFragment extends Fragment {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         // for fragments, findViewById here
-        citiesListView = (ListView) getView().findViewById(R.id.citiesListView);
+        ListView citiesListView = (ListView) getView().findViewById(R.id.citiesListView);
 
         // we first need a database open helper to even touch the DB...
-        MyDatabaseOpenHelper dboh = new MyDatabaseOpenHelper(getContext());
+        MyDatabaseOpenHelper dbHelper = new MyDatabaseOpenHelper(getContext());
         // we then get a readable handler to the DB...
-        SQLiteDatabase db = dboh.getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         // and then we run a raw SQL query which returns a cursor pointing to the results
         Cursor cursor = db.rawQuery("SELECT * FROM cities", null);
 
@@ -143,7 +125,7 @@ public class ListFragment extends Fragment {
         cursor.close();
 
         // build adapter
-        ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(
+        final ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(
                 getContext(),
                 android.R.layout.simple_list_item_1,
                 cities);
@@ -159,6 +141,64 @@ public class ListFragment extends Fragment {
 
             }
         });
+
+        citiesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                final String selectedCity = cities.get(position);
+
+                final CharSequence[] actionsArr = {"Set " + selectedCity + " as Home", "Delete " + selectedCity, "Cancel"};
+                Log.d("TAG", "Long clicked");
+                AlertDialog.Builder builder = new AlertDialog.Builder(fragContext);
+
+                builder.setTitle(selectedCity + " Actions:")
+                        .setItems(actionsArr, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+                                switch (which) {
+                                    // set as home
+                                    case 0:
+                                        Utils.setHomePref(selectedCity, getContext());
+                                        break;
+                                    // delete item
+                                    case 1:
+                                        cities.remove(position);
+                                        cityAdapter.notifyDataSetChanged();
+                                        DeleteFromDbByName(selectedCity);
+                                        // set home to default
+                                        Utils.setHomePref("Banana", getContext());
+                                        break;
+                                    // cancel
+                                    default:
+                                        break;
+                                }
+                            }
+                        });
+                builder.create().show();
+                //builder.show();
+                Log.d("TAG", "menu built");
+                return true;
+            }
+        });
+    }
+
+    private void DeleteFromDbByName(String selectedCity) {
+        // we first need a database open helper to even touch the DB...
+        MyDatabaseOpenHelper dbHelper = new MyDatabaseOpenHelper(fragContext);
+        // we then get a readable handler to the DB...
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        // Define 'where' part of query.
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = {String.valueOf("'" + selectedCity + "'")};
+        // Issue SQL statement.
+        //db.rawQuery("DELETE FROM cities WHERE NAME = '" + selectedCity+"'", null);
+
+        String selection = "NAME=" + selectionArgs[0];
+        db.delete("cities", selection, null);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

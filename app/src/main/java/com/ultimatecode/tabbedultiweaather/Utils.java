@@ -1,13 +1,13 @@
 package com.ultimatecode.tabbedultiweaather;
 
-import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,13 +25,58 @@ import java.net.URL;
  */
 
 public class Utils {
+    // Home preference getter and setter
 
-    public static String getDotlessString(String tempString) {
-        // check if "." exists in the returned value
-        int subStrEnd = tempString.indexOf(".");
-        if (subStrEnd > 0)
-            tempString = tempString.substring(0, subStrEnd); // remove . for readability
-        return tempString;
+    @NonNull
+    public static String getHomePref(Context context) {
+        // First, access the shared preferences object, used for reading and writing
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        // Read a value (i.e. a boolean) using a self-defined key (e.g. '"laserShield")
+        return sharedPreferences.getString(context.getString(R.string.homeKeyPref)
+                , context.getString(R.string.homeKeyDefault));
+    }
+
+    public static void setHomePref(String newVal, Context context) {
+        // First, access the shared preferences object, used for reading and writing
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPreferences.edit().putString(
+                context.getString(R.string.homeKeyPref), newVal).apply();
+    }
+
+
+    // methods concerning Weather API reading
+
+    public static CityWeather ProcessWeatherResponse(String jsonResponse) {
+        //TODO verify internet connection
+        CityWeather cityWeather = null;
+        try {
+            // ... then call the method that connects and fetches the data ...
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            JSONObject mainJson = jsonObject.getJSONObject("main");
+            JSONArray weather = jsonObject.getJSONArray("weather");
+            JSONObject singleWeather = weather.getJSONObject(0); // index 0 is first element
+
+
+            cityWeather = new CityWeather(
+                    jsonObject.getString("name"),
+                    singleWeather.getString("description"),
+                    mainJson.getString("temp"),
+                    jsonObject.getJSONObject("clouds").getString("all"),
+                    jsonObject.getJSONObject("wind").getString("speed"),
+                    mainJson.getString("humidity"));
+        } catch (Exception ignored) {
+        }
+        return cityWeather;
+    }
+
+    public static Boolean ExistsResponse(String response) {
+        String cod = "404";
+        try {
+            cod = new JSONObject(response).getString("cod");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return cod.equals("200");
     }
 
     // forms the URL for openWeatherAPI
@@ -71,10 +116,9 @@ public class Utils {
             if (inputStream != null) {
                 inputStream.close();
             }
-            return stringBuilder.toString();// this contains the full reply
         }
+        return stringBuilder.toString(); // this contains the full reply
     }
-
 
 
     // Methods to help display large images without running out of memory
@@ -95,7 +139,7 @@ public class Utils {
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
-    public static int calculateInSampleSize(
+    private static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
@@ -119,40 +163,12 @@ public class Utils {
     }
 
 
-    // methods concerning Weather
-    public static CityWeather ProcessWeatherResponse(String jsonResponse) {
-        //TODO verify internet connection
-        CityWeather cityWeather = null;
-        try {
-            // ... then call the method that connects and fetches the data ...
-            JSONObject jsonObject = new JSONObject(jsonResponse);
-            JSONObject mainJson = jsonObject.getJSONObject("main");
-            JSONArray weather = jsonObject.getJSONArray("weather");
-            JSONObject singleWeather = weather.getJSONObject(0); // index 0 is first element
-
-
-            cityWeather = new CityWeather(
-                    jsonObject.getString("name"),
-                    singleWeather.getString("description"),
-                    mainJson.getString("temp"),
-                    jsonObject.getJSONObject("clouds").getString("all"),
-                    jsonObject.getJSONObject("wind").getString("speed"),
-                    mainJson.getString("humidity"));
-        } catch (Exception e) {
-            int xx = 0;
-        }
-        return cityWeather;
-    }
-
-    public static Boolean Exists(String response) {
-
-        String cod = "404";
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-            cod = jsonObject.getString("cod");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return cod.equals("200");
+    // Misc
+    public static String getDotlessString(String tempString) {
+        // check if "." exists in the returned value
+        int subStrEnd = tempString.indexOf(".");
+        if (subStrEnd > 0)
+            tempString = tempString.substring(0, subStrEnd); // remove . for readability
+        return tempString;
     }
 }

@@ -2,11 +2,9 @@ package com.ultimatecode.tabbedultiweaather;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +26,10 @@ import java.io.IOException;
  */
 public class DetailedFragment extends Fragment {
 
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
     private TextView cityNameTextView;
     private TextView descTextView;
     private TextView windValTextView;
@@ -37,12 +39,6 @@ public class DetailedFragment extends Fragment {
     private ImageView cityWeatherImg;
     private Button mapBtn;
     private Button wikiBtn;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -104,11 +100,7 @@ public class DetailedFragment extends Fragment {
         super.onResume();
 
         //// get home city
-
-        // First, access the shared preferences object, used for reading and writing
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        // Read a value (i.e. a boolean) using a self-defined key (e.g. '"laserShield")
-        final String homeCityName = sharedPreferences.getString("home", "Banana");
+        final String homeCityName = Utils.getHomePref(getContext());
 
         setButtonsListeners(homeCityName);
 
@@ -118,6 +110,7 @@ public class DetailedFragment extends Fragment {
 
         cityNameTextView.setText(homeCityName);
     }
+
 
     // Sets the button functionality to open Wiki page and Map app
     private void setButtonsListeners(final String homeCityName) {
@@ -145,44 +138,6 @@ public class DetailedFragment extends Fragment {
             }
         });
     }
-
-    private class DownloadWeatherTask extends AsyncTask<String, Void, CityWeather> {
-        @Override
-        protected CityWeather doInBackground(String... urls) {
-            // execute in background, in separate thread – cannot edit the UI
-            // call the method that connects and fetches the data and return the reply
-            String jsonRes = null;
-            try {
-                jsonRes = Utils.downloadUrl(urls[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return Utils.ProcessWeatherResponse(jsonRes);
-        }
-
-        @Override
-        protected void onPostExecute(CityWeather result) {
-
-            // finally, update the TextView accordingly
-            String tempString = Utils.getDotlessString(result.getTemp());
-            String tempText = tempString + " \u2103";
-            String windText = result.getWind() + " km/h";
-            String cloudsText = result.getCloud() + " %";
-            String humidityText = result.getHumidity() + "%";
-
-            tempValTextView.setText(tempText);
-            windValTextView.setText(windText);
-            cloudsValTextView.setText(cloudsText);
-            humidityValTextView.setText(humidityText);
-            descTextView.setText(result.getDesc());
-
-            cityWeatherImg.setImageBitmap(
-                    Utils.decodeSampledBitmapFromResource(getResources(), R.drawable.stormloop, 230, 230));
-        }
-
-
-    }
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -221,5 +176,42 @@ public class DetailedFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private class DownloadWeatherTask extends AsyncTask<String, Void, CityWeather> {
+        @Override
+        protected CityWeather doInBackground(String... urls) {
+            // execute in background, in separate thread – cannot edit the UI
+            // call the method that connects and fetches the data and return the reply
+            String jsonRes = null;
+            try {
+                jsonRes = Utils.downloadUrl(urls[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return Utils.ProcessWeatherResponse(jsonRes);
+        }
+
+        @Override
+        protected void onPostExecute(CityWeather result) {
+
+            // finally, update the TextView accordingly
+            String tempString = Utils.getDotlessString(result.getTemp());
+            String tempText = tempString + " \u2103";
+            String windText = result.getWind() + " km/h";
+            String cloudsText = result.getCloud() + " %";
+            String humidityText = result.getHumidity() + "%";
+
+            tempValTextView.setText(tempText);
+            windValTextView.setText(windText);
+            cloudsValTextView.setText(cloudsText);
+            humidityValTextView.setText(humidityText);
+            descTextView.setText(result.getDesc());
+
+            cityWeatherImg.setImageBitmap(
+                    Utils.decodeSampledBitmapFromResource(getResources(), R.drawable.stormloop, 230, 230));
+        }
+
+
     }
 }

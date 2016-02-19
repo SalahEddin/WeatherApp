@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootAddCityView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
     tools:context="com.ultimatecode.tabbedultiweaather.AddCityActivity">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="40dp"
         android:text="Add the city name here"
-        android:textSize="25sp"
-        android:paddingBottom="40dp"/>
+        android:textSize="25sp" />
 
     <AutoCompleteTextView
         android:id="@+id/cityNameTextbox"
@@ -26,14 +27,14 @@
         android:id="@+id/homeCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set as my home"
         android:layout_marginTop="40dp"
-        android:checked="false" />
+        android:checked="false"
+        android:text="Set as my home" />
 
     <Button
         android:id="@+id/addCity"
+        style="@android:style/Widget.Material.Light.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add city"
-        style="@android:style/Widget.Material.Light.Button" />
+        android:text="Add city" />
 </LinearLayout>
