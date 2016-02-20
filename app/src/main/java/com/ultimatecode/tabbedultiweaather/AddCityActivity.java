@@ -1,6 +1,7 @@
 package com.ultimatecode.tabbedultiweaather;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.ultimatecode.tabbedultiweaather.database.MyDatabaseOpenHelper;
@@ -16,7 +18,8 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 public class AddCityActivity extends AppCompatActivity {
-
+    private Context context;
+    private CheckBox HomeCheckbox;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,40 +27,46 @@ public class AddCityActivity extends AppCompatActivity {
 
         final AutoCompleteTextView cityName =
                 (AutoCompleteTextView) findViewById(R.id.cityNameTextbox);
+        context = this;
+        HomeCheckbox = (CheckBox) findViewById(R.id.homeCheckBox);
 
         Button addButton = (Button) findViewById(R.id.addCity);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //clean city string
-                String submittedName =  cityName.getText().toString().trim();
+                String submittedName = cityName.getText().toString().trim();
 
                 // confirm city exist
                 Boolean exists = false;
                 try {
                     exists = new CityWeatherExistsTask().execute(
                             Utils.CreateWeatherUrl(submittedName)).get();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
+                } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
 
-                if(exists){
+                if (exists) {
                     // we first need a database open helper to even touch the DB...
                     MyDatabaseOpenHelper dbHelper = new MyDatabaseOpenHelper(getBaseContext());
                     // we then get a readable handler to the DB...
                     SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-                    //TODO check if it exists in DB
+                    //check if entry already exists in DB
+                    boolean inDb = Utils.alreadyAdded(submittedName, context);
+                    if (inDb) {
+                        CharSequence msg = "" + submittedName + " is already in you favourites list";
+                        Toast.makeText(AddCityActivity.this, msg, Toast.LENGTH_LONG).show();
+                    } else {
+                        // Add city to list
+                        if (HomeCheckbox.isChecked()) Utils.setHomePref(submittedName, context);
+                        ContentValues values = new ContentValues();
+                        values.put("NAME", submittedName);
+                        db.insert("cities", null, values);
 
-                    ContentValues values = new ContentValues();
-                    values.put("NAME",submittedName);
-                    db.insert("cities", null, values);
-
-                    finish();
-                }
-                else{
+                        finish();
+                    }
+                } else {
                     CharSequence msg = "Just like unicorns... \n" + submittedName + " does not exist";
                     Toast.makeText(AddCityActivity.this, msg, Toast.LENGTH_LONG).show();
 
@@ -85,8 +94,6 @@ public class AddCityActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean result) {
 
         }
-
-
 
 
     }

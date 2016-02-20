@@ -3,11 +3,15 @@ package com.ultimatecode.tabbedultiweaather;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.ultimatecode.tabbedultiweaather.database.MyDatabaseOpenHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +29,21 @@ import java.net.URL;
  */
 
 public class Utils {
+
+    public static boolean alreadyAdded(String submittedName, Context context) {
+        // we first need a database open helper to even touch the DB...
+        MyDatabaseOpenHelper dbHelper = new MyDatabaseOpenHelper(context);
+        // we then get a readable handler to the DB...
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        // and then we run a raw SQL query which returns a cursor pointing to the results
+        Cursor cursor = db.rawQuery("SELECT * FROM cities WHERE NAME='" + submittedName + "'", null);
+
+        // number of rows in the result set
+        int numOfRows = cursor.getCount();
+        cursor.close();
+        return (numOfRows > 0);
+    }
+
     // Home preference getter and setter
 
     @NonNull
@@ -40,7 +59,7 @@ public class Utils {
         // First, access the shared preferences object, used for reading and writing
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         sharedPreferences.edit().putString(
-                context.getString(R.string.homeKeyPref), newVal).apply();
+                context.getString(R.string.homeKeyPref), newVal).commit();
     }
 
 
@@ -81,8 +100,9 @@ public class Utils {
 
     // forms the URL for openWeatherAPI
     public static String CreateWeatherUrl(String cityName) {
+        String processedName = cityName.trim().replace(" ", "%20");
         return "http://api.openweathermap.org/data/2.5/weather?q="
-                + cityName
+                + processedName
                 + "&appid=c32028af7342857d87674f1127599ca7"
                 + "&units=metric";
     }
