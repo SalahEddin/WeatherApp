@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.ultimatecode.tabbedultiweaather.DetailedFragment">
 
-    <data></data>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -57,14 +55,14 @@
                             android:id="@+id/frag_temp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="31 \u2103"
+                            android:text="- \u2103"
                             android:textSize="50sp" />
 
                         <TextView
                             android:id="@+id/frag_weatherDesc"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="it's sunny here"/>
+                            android:text="@string/dash" />
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -72,9 +70,9 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
                                 android:gravity="bottom"
-                                android:orientation="horizontal"
-                                android:layout_alignParentRight="true">
+                                android:orientation="horizontal">
 
                                 <Button
                                     android:id="@+id/frag_mapBtn"
@@ -89,7 +87,6 @@
                                     style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_toLeftOf="@id/mapBtn"
                                     android:text="Wikipedia" />
                             </LinearLayout>
                         </RelativeLayout>
@@ -134,7 +131,7 @@
                             android:id="@+id/frag_clouds"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="50 %"
+                            android:text="- %"
                             android:textSize="@dimen/text_card_val" />
 
                         <View
@@ -153,7 +150,7 @@
                             android:id="@+id/frag_wind"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="20 km/h"
+                            android:text="- km/h"
                             android:textSize="@dimen/text_card_val" />
 
                         <View
@@ -172,7 +169,7 @@
                             android:id="@+id/frag_humidity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="20 %"
+                            android:text="- %"
                             android:textSize="@dimen/text_card_val" />
 
                     </LinearLayout>

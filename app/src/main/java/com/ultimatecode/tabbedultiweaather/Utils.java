@@ -182,7 +182,6 @@ public class Utils {
         return inSampleSize;
     }
 
-
     // Misc
     public static String getDotlessString(String tempString) {
         // check if "." exists in the returned value

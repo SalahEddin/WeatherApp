@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -165,33 +164,16 @@ public class ListFragment extends Fragment {
         MyDatabaseOpenHelper dbHelper = new MyDatabaseOpenHelper(fragContext);
         // we then get a readable handler to the DB...
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        // Define 'where' part of query.
         // Specify arguments in placeholder order.
         String[] selectionArgs = {String.valueOf("'" + selectedCity + "'")};
         // Issue SQL statement.
-        //db.rawQuery("DELETE FROM cities WHERE NAME = '" + selectedCity+"'", null);
-
         String selection = "NAME=" + selectionArgs[0];
         db.delete("cities", selection, null);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
@@ -200,16 +182,6 @@ public class ListFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

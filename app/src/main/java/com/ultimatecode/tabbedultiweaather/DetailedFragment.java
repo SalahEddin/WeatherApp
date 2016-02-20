@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -79,7 +78,6 @@ public class DetailedFragment extends Fragment {
             public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
                 if (!key.equals(getContext().getResources().getString(R.string.homeKeyPref)))
                     return;
-
 
                 cityNameTextView.setText(homeCityName);
                 setButtonsListeners(homeCityName);
@@ -179,10 +177,16 @@ public class DetailedFragment extends Fragment {
             humidityValTextView.setText(humidityText);
             descTextView.setText(result.getDesc());
 
+            int imgId = R.drawable.clear;
+            if (result.getDesc().contains("rain")) {
+                imgId = R.drawable.rainy;
+            } else if (result.getDesc().contains("cloud")) {
+                imgId = R.drawable.cloudy;
+            }
+
             cityWeatherImg.setImageBitmap(
-                    Utils.decodeSampledBitmapFromResource(getResources(), R.drawable.stormloop, 230, 230));
+                    Utils.decodeSampledBitmapFromResource(getResources(), imgId,
+                            cityWeatherImg.getWidth(), cityWeatherImg.getHeight()));
         }
-
-
     }
 }
