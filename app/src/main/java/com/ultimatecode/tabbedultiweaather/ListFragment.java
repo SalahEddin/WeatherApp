@@ -120,7 +120,6 @@ public class ListFragment extends Fragment {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-
                 final String selectedCity = cities.get(position);
 
                 final CharSequence[] actionsArr = {"Set " + selectedCity + " as Home", "Delete " + selectedCity, "Cancel"};
@@ -152,8 +151,6 @@ public class ListFragment extends Fragment {
                             }
                         });
                 builder.create().show();
-                //builder.show();
-                Log.d("TAG", "menu built");
                 return true;
             }
         });
