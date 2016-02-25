@@ -11,14 +11,16 @@ public class CityWeather {
     private final String cloud;
     private final String wind;
     private final String humidity;
+    private final String icon;
 
-    public CityWeather(String name, String desc, String temp, String cloud, String wind, String humidity) {
+    public CityWeather(String name, String desc, String temp, String cloud, String wind, String humidity, String icon) {
         this.name = name;
         this.desc = desc;
         this.temp = temp;
         this.cloud = cloud;
         this.wind = wind;
         this.humidity = humidity;
+        this.icon = icon;
     }
 
     @Override
@@ -50,7 +52,9 @@ public class CityWeather {
         return humidity;
     }
 
-
+    public String getIconCode() {
+        return icon;
+    }
 }
 
 

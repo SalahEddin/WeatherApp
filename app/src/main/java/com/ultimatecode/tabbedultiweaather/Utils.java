@@ -82,7 +82,8 @@ public class Utils {
                     mainJson.getString("temp"),
                     jsonObject.getJSONObject("clouds").getString("all"),
                     jsonObject.getJSONObject("wind").getString("speed"),
-                    mainJson.getString("humidity"));
+                    mainJson.getString("humidity"),
+                    singleWeather.getString("icon"));
         } catch (Exception ignored) {
         }
         return cityWeather;

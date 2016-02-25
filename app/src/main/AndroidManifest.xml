@@ -13,13 +13,14 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".AddCityActivity"
             android:windowSoftInputMode="stateVisible" />
-        <activity android:name=".DetailedActivity"/>
+        <activity android:name=".DetailedActivity" />
     </application>
 
 </manifest>

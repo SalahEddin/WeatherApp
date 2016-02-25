@@ -8,4 +8,6 @@
     <!-- My dimensions, following the Android Design guidelines.  -->
     <dimen name="text_card_header">22sp</dimen>
     <dimen name="text_card_val">50sp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

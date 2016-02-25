@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ultimatecode.tabbedultiweaather.database.MyDatabaseOpenHelper;
@@ -20,16 +22,16 @@ import java.util.concurrent.ExecutionException;
 public class AddCityActivity extends AppCompatActivity {
     private Context context;
     private CheckBox HomeCheckbox;
+    private TextView ErrorTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_city);
 
-        final AutoCompleteTextView cityName =
-                (AutoCompleteTextView) findViewById(R.id.cityNameTextbox);
+        final EditText cityName = (EditText) findViewById(R.id.cityNameTextbox);
         context = this;
         HomeCheckbox = (CheckBox) findViewById(R.id.homeCheckBox);
-
+        ErrorTextView = (TextView) findViewById(R.id.errorTextView);
         Button addButton = (Button) findViewById(R.id.addCity);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +57,8 @@ public class AddCityActivity extends AppCompatActivity {
                     //check if entry already exists in DB
                     boolean inDb = Utils.alreadyAdded(submittedName, context);
                     if (inDb) {
-                        CharSequence msg = "" + submittedName + " is already in you favourites list";
+                        ErrorTextView.setText("Do you like " + submittedName + " that much? it's already in your list");
+                        CharSequence msg = "" + submittedName + " is already in your list";
                         Toast.makeText(AddCityActivity.this, msg, Toast.LENGTH_LONG).show();
                     } else {
                         // Add city to list
@@ -67,7 +70,8 @@ public class AddCityActivity extends AppCompatActivity {
                         finish();
                     }
                 } else {
-                    CharSequence msg = "Just like unicorns... \n" + submittedName + " does not exist";
+                    ErrorTextView.setText("Like unicorns..." + submittedName + " city does not exist");
+                    CharSequence msg = submittedName + " is not in our cities list";
                     Toast.makeText(AddCityActivity.this, msg, Toast.LENGTH_LONG).show();
 
                 }

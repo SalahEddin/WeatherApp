@@ -1,18 +1,25 @@
 package com.ultimatecode.tabbedultiweaather;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.ultimatecode.tabbedultiweaather.database.MyDatabaseOpenHelper;
 
 import java.io.IOException;
 
-public class DetailedActivity extends AppCompatActivity {
+public class DetailedActivity extends Activity {
 
     private TextView cityNameTextView;
     private TextView descTextView;
@@ -21,8 +28,11 @@ public class DetailedActivity extends AppCompatActivity {
     private TextView humidityValTextView;
     private TextView tempValTextView;
     private ImageView cityWeatherImg;
+    private ImageView cityWeatherIcon;
     private Button mapBtn;
     private Button wikiBtn;
+    private Button deleteCardBtn;
+    private Button setHomeCardBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +49,10 @@ public class DetailedActivity extends AppCompatActivity {
 
         mapBtn = (Button) findViewById(R.id.mapBtn);
         wikiBtn = (Button) findViewById(R.id.wikiBtn);
-
-        cityWeatherImg = (ImageView) findViewById(R.id.imageView);
+        deleteCardBtn = (Button) findViewById(R.id.deleteCardBtn);
+        setHomeCardBtn = (Button) findViewById(R.id.setHomeCardBtn);
+        cityWeatherImg = (ImageView) findViewById(R.id.WeatherimageView);
+        cityWeatherIcon = (ImageView) findViewById(R.id.weatherIcon);
     }
 
     @Override
@@ -81,6 +93,45 @@ public class DetailedActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        deleteCardBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Confirmation Dialog
+                new AlertDialog.Builder(DetailedActivity.this)
+                        .setTitle("Delete" + cityNameString)
+                        .setMessage("\t Are you sure you want to delete " + cityNameString + "? \n (Don't worry, you can add it again)")
+                        .setIcon(android.R.drawable.ic_delete)
+                        .setPositiveButton("Delete ", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                DeleteFromDbByName(cityNameString);
+                                Toast.makeText(DetailedActivity.this, cityNameString + " successfully removed", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null).show();
+            }
+        });
+        setHomeCardBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.setHomePref(cityNameString, DetailedActivity.this);
+                Toast.makeText(DetailedActivity.this, "Set " + cityNameString + " as Home", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+    }
+
+    private void DeleteFromDbByName(String selectedCity) {
+        // we first need a database open helper to even touch the DB...
+        MyDatabaseOpenHelper dbHelper = new MyDatabaseOpenHelper(getApplicationContext());
+        // we then get a readable handler to the DB...
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = {String.valueOf("'" + selectedCity + "'")};
+        // Issue SQL statement.
+        String selection = "NAME=" + selectionArgs[0];
+        db.delete("cities", selection, null);
     }
 
     private class DownloadWeatherTask extends AsyncTask<String, Void, CityWeather> {
@@ -124,6 +175,18 @@ public class DetailedActivity extends AppCompatActivity {
             cityWeatherImg.setImageBitmap(
                     Utils.decodeSampledBitmapFromResource(getResources(), imgId,
                             cityWeatherImg.getWidth(), cityWeatherImg.getHeight()));
+            try {
+
+
+                Resources resources = DetailedActivity.this.getResources();
+                final int resourceId = resources.getIdentifier("r" + result.getIconCode()
+                        , "drawable",
+                        DetailedActivity.this.getPackageName());
+
+                cityWeatherIcon.setImageDrawable(resources.getDrawable(resourceId, DetailedActivity.this.getTheme()));
+            } catch (Exception e) {
+                cityWeatherIcon.setImageResource(R.drawable.unknown);
+            }
         }
     }
 }
