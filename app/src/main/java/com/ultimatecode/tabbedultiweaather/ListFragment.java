@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -23,6 +22,9 @@ import com.ultimatecode.tabbedultiweaather.database.MyDatabaseOpenHelper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.BottomSheetDialog; //// TODO: 25/02/16 switch dialog to bottom sheet
 
 public class ListFragment extends Fragment {
 
@@ -124,6 +126,8 @@ public class ListFragment extends Fragment {
 
                 final CharSequence[] actionsArr = {"Set " + selectedCity + " as Home", "Delete " + selectedCity, "Cancel"};
                 Log.d("TAG", "Long clicked");
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(fragContext);
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(fragContext);
 
                 builder.setTitle(selectedCity + " Actions:")
@@ -142,6 +146,7 @@ public class ListFragment extends Fragment {
                                         cityAdapter.notifyDataSetChanged();
                                         DeleteFromDbByName(selectedCity);
                                         // set home to default
+                                        //// TODO: 26/02/16 get GPS coordinates
                                         Utils.setHomePref("Banana", getContext());
                                         break;
                                     // cancel

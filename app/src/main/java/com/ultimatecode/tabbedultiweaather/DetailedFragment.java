@@ -3,6 +3,7 @@ package com.ultimatecode.tabbedultiweaather;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ public class DetailedFragment extends Fragment {
     private TextView humidityValTextView;
     private TextView tempValTextView;
     private ImageView cityWeatherImg;
+    private ImageView cityWeatherIcon;
     private Button mapBtn;
     private Button wikiBtn;
 
@@ -60,7 +62,8 @@ public class DetailedFragment extends Fragment {
         mapBtn = (Button) view.findViewById(R.id.frag_mapBtn);
         wikiBtn = (Button) view.findViewById(R.id.frag_wikiBtn);
 
-        cityWeatherImg = (ImageView) view.findViewById(R.id.frag_weatherImg);
+        cityWeatherImg = (ImageView) view.findViewById(R.id.WeatherimageView);
+        cityWeatherIcon = (ImageView) view.findViewById(R.id.weatherIcon);
 
         // Inflate the layout for this fragment
         return view;
@@ -187,6 +190,19 @@ public class DetailedFragment extends Fragment {
             cityWeatherImg.setImageBitmap(
                     Utils.decodeSampledBitmapFromResource(getResources(), imgId,
                             cityWeatherImg.getWidth(), cityWeatherImg.getHeight()));
+
+            try {
+
+
+                Resources resources = DetailedFragment.this.getResources();
+                final int resourceId = resources.getIdentifier("r" + result.getIconCode()
+                        , "drawable",
+                        MainActivity.PACKAGE_NAME);
+
+                cityWeatherIcon.setImageDrawable(resources.getDrawable(resourceId, getContext().getTheme()));
+            } catch (Exception e) {
+                cityWeatherIcon.setImageResource(R.drawable.unknown);
+            }
         }
     }
 }

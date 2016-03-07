@@ -3,11 +3,12 @@
     package="com.ultimatecode.tabbedultiweaather">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Ultimate Weather"
+        android:label=""
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
@@ -19,8 +20,13 @@
         </activity>
         <activity
             android:name=".AddCityActivity"
+            android:label="Ultimate Weather"
             android:windowSoftInputMode="stateVisible" />
         <activity android:name=".DetailedActivity" />
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
