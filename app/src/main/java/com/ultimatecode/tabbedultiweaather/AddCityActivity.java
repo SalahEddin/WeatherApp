@@ -33,48 +33,45 @@ public class AddCityActivity extends AppCompatActivity {
         HomeCheckbox = (CheckBox) findViewById(R.id.homeCheckBox);
         ErrorTextView = (TextView) findViewById(R.id.errorTextView);
         Button addButton = (Button) findViewById(R.id.addCity);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //clean city string
-                String submittedName = cityName.getText().toString().trim();
+        addButton.setOnClickListener(v -> {
+            //clean city string
+            String submittedName = cityName.getText().toString().trim();
 
-                // confirm city exist
-                Boolean exists = false;
-                try {
-                    exists = new CityWeatherExistsTask().execute(
-                            Utils.CreateWeatherUrl(submittedName)).get();
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
+            // confirm city exist
+            Boolean exists = false;
+            try {
+                exists = new CityWeatherExistsTask().execute(
+                        Utils.CreateWeatherUrl(submittedName)).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
 
-                if (exists) {
-                    // we first need a database open helper to even touch the DB...
-                    MyDatabaseOpenHelper dbHelper = new MyDatabaseOpenHelper(getBaseContext());
-                    // we then get a readable handler to the DB...
-                    SQLiteDatabase db = dbHelper.getReadableDatabase();
+            if (exists) {
+                // we first need a database open helper to even touch the DB...
+                MyDatabaseOpenHelper dbHelper = new MyDatabaseOpenHelper(getBaseContext());
+                // we then get a readable handler to the DB...
+                SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-                    //check if entry already exists in DB
-                    boolean inDb = Utils.alreadyAdded(submittedName, context);
-                    if (inDb) {
-                        ErrorTextView.setText("Do you like " + submittedName + " that much? it's already in your list");
-                        CharSequence msg = "" + submittedName + " is already in your list";
-                        Toast.makeText(AddCityActivity.this, msg, Toast.LENGTH_LONG).show();
-                    } else {
-                        // Add city to list
-                        if (HomeCheckbox.isChecked()) Utils.setHomePref(submittedName, context);
-                        ContentValues values = new ContentValues();
-                        values.put("NAME", submittedName);
-                        db.insert("cities", null, values);
-
-                        finish();
-                    }
-                } else {
-                    ErrorTextView.setText("Like unicorns..." + submittedName + " city does not exist");
-                    CharSequence msg = submittedName + " is not in our cities list";
+                //check if entry already exists in DB
+                boolean inDb = Utils.alreadyAdded(submittedName, context);
+                if (inDb) {
+                    ErrorTextView.setText("Do you like " + submittedName + " that much? it's already in your list");
+                    CharSequence msg = "" + submittedName + " is already in your list";
                     Toast.makeText(AddCityActivity.this, msg, Toast.LENGTH_LONG).show();
+                } else {
+                    // Add city to list
+                    if (HomeCheckbox.isChecked()) Utils.setHomePref(submittedName, context);
+                    ContentValues values = new ContentValues();
+                    values.put("NAME", submittedName);
+                    db.insert("cities", null, values);
 
+                    finish();
                 }
+            } else {
+                ErrorTextView.setText("Like unicorns..." + submittedName + " city does not exist");
+                CharSequence msg = submittedName + " is not in our cities list";
+                Toast.makeText(AddCityActivity.this, msg, Toast.LENGTH_LONG).show();
+
             }
         });
     }

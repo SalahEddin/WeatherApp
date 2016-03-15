@@ -5,16 +5,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 
 import java.io.IOException;
 
@@ -32,8 +35,12 @@ public class DetailedFragment extends Fragment {
     private Button mapBtn;
     private Button wikiBtn;
 
-    private OnFragmentInteractionListener mListener;
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
+
+    private CardView MainCardView;
+    private CardView DetailedCardView;
+    private CardView noNetCardView;
+
 
     public DetailedFragment() {
         // Required empty public constructor
@@ -65,6 +72,10 @@ public class DetailedFragment extends Fragment {
         cityWeatherImg = (ImageView) view.findViewById(R.id.WeatherimageView);
         cityWeatherIcon = (ImageView) view.findViewById(R.id.weatherIcon);
 
+        MainCardView = (CardView) view.findViewById(R.id.main_card_view);
+        DetailedCardView= (CardView) view.findViewById(R.id.detail_cardview);
+        noNetCardView= (CardView) view.findViewById(R.id.no_net_card_view);
+
         // Inflate the layout for this fragment
         return view;
     }
@@ -77,16 +88,26 @@ public class DetailedFragment extends Fragment {
         final String homeCityName = Utils.getHomePref(getContext());
 
         // sharedPreference onchange listener
-        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-                if (!key.equals(getContext().getResources().getString(R.string.homeKeyPref)))
-                    return;
+        listener = (prefs, key) -> {
+            if (!key.equals(getContext().getResources().getString(R.string.homeKeyPref)))
+                return;
 
-                cityNameTextView.setText(homeCityName);
-                setButtonsListeners(homeCityName);
-                String url = Utils.CreateWeatherUrl(homeCityName.trim());
+            cityNameTextView.setText(homeCityName);
+            setButtonsListeners(homeCityName);
+            String url = Utils.CreateWeatherUrl(homeCityName.trim());
+
+            if (Utils.isNetworkAvailable(getContext()) ) {
                 new DownloadWeatherTask().execute(url);
+                noNetCardView.setVisibility(View.GONE);
             }
+            else{
+                MainCardView.setVisibility(View.GONE);
+                DetailedCardView.setVisibility(View.GONE);
+
+                // WifiManager wifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
+                // wifiManager.setWifiEnabled(true);
+            }
+
         };
 
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -96,8 +117,16 @@ public class DetailedFragment extends Fragment {
         setButtonsListeners(homeCityName);
 
         String url = Utils.CreateWeatherUrl(homeCityName.trim());
-        // contact API
-        new DownloadWeatherTask().execute(url);
+
+        if (Utils.isNetworkAvailable(getContext()) ) {
+            new DownloadWeatherTask().execute(url);
+            noNetCardView.setVisibility(View.GONE);
+        }
+        else{
+            MainCardView.setVisibility(View.GONE);
+            DetailedCardView.setVisibility(View.GONE);
+            noNetCardView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -109,28 +138,22 @@ public class DetailedFragment extends Fragment {
 
     // Sets the button functionality to open Wiki page and Map app
     private void setButtonsListeners(final String homeCityName) {
-        mapBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri gmmIntentUri = Uri.parse("http://maps.google.co.in/maps?q=" + homeCityName);
-                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                // Make the Intent explicit by setting the Google Maps package
-                mapIntent.setPackage("com.google.android.apps.maps");
+        mapBtn.setOnClickListener(v -> {
+            Uri gmmIntentUri = Uri.parse("http://maps.google.co.in/maps?q=" + homeCityName);
+            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            // Make the Intent explicit by setting the Google Maps package
+            mapIntent.setPackage("com.google.android.apps.maps");
 
-                // Attempt to start an activity that can handle the Intent
-                startActivity(mapIntent);
-            }
+            // Attempt to start an activity that can handle the Intent
+            startActivity(mapIntent);
         });
 
-        wikiBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = "https://en.wikipedia.org/wiki/" + homeCityName.trim().replace(" ", "_");
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
-            }
+        wikiBtn.setOnClickListener(v -> {
+            String url = "https://en.wikipedia.org/wiki/" + homeCityName.trim().replace(" ", "_");
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
         });
     }
 
@@ -142,7 +165,6 @@ public class DetailedFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     public interface OnFragmentInteractionListener {

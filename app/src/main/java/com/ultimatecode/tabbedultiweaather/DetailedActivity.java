@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -34,6 +35,10 @@ public class DetailedActivity extends Activity {
     private Button deleteCardBtn;
     private Button setHomeCardBtn;
 
+    private CardView MainCardView;
+    private CardView DetailedCardView;
+    private CardView noNetCardView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,10 @@ public class DetailedActivity extends Activity {
         setHomeCardBtn = (Button) findViewById(R.id.setHomeCardBtn);
         cityWeatherImg = (ImageView) findViewById(R.id.WeatherimageView);
         cityWeatherIcon = (ImageView) findViewById(R.id.weatherIcon);
+
+        MainCardView = (CardView) findViewById(R.id.main_card_view);
+        DetailedCardView= (CardView) findViewById(R.id.detail_cardview);
+        noNetCardView= (CardView) findViewById(R.id.no_net_card_view);
     }
 
     @Override
@@ -65,60 +74,56 @@ public class DetailedActivity extends Activity {
         setButtonsListeners(cityNameString);
         // prepare URL
         String url = Utils.CreateWeatherUrl(cityNameString.trim());
-        // contact API
-        new DownloadWeatherTask().execute(url);
+
+        if (Utils.isNetworkAvailable(getApplicationContext()) ) {
+            new DownloadWeatherTask().execute(url);
+            noNetCardView.setVisibility(View.GONE);
+        }
+        else{
+            MainCardView.setVisibility(View.GONE);
+            DetailedCardView.setVisibility(View.GONE);
+            noNetCardView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setButtonsListeners(final String cityNameString) {
-        mapBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri gmmIntentUri = Uri.parse("http://maps.google.co.in/maps?q=" + cityNameString);
-                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                // Make the Intent explicit by setting the Google Maps package
-                mapIntent.setPackage("com.google.android.apps.maps");
+        mapBtn.setOnClickListener(v -> {
+            Uri gmmIntentUri = Uri.parse("http://maps.google.co.in/maps?q=" + cityNameString);
+            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            // Make the Intent explicit by setting the Google Maps package
+            mapIntent.setPackage("com.google.android.apps.maps");
 
-                // Attempt to start an activity that can handle the Intent
-                startActivity(mapIntent);
-            }
+            // Attempt to start an activity that can handle the Intent
+            startActivity(mapIntent);
         });
 
-        wikiBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = "https://en.wikipedia.org/wiki/" + cityNameString.trim().replace(" ", "_");
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
-            }
+        wikiBtn.setOnClickListener(v -> {
+            String url = "https://en.wikipedia.org/wiki/" + cityNameString.trim().replace(" ", "_");
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
         });
 
-        deleteCardBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Confirmation Dialog
-                new AlertDialog.Builder(DetailedActivity.this)
-                        .setTitle("Delete" + cityNameString)
-                        .setMessage("\t Are you sure you want to delete " + cityNameString + "? \n (Don't worry, you can add it again)")
-                        .setIcon(android.R.drawable.ic_delete)
-                        .setPositiveButton("Delete ", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                DeleteFromDbByName(cityNameString);
-                                Toast.makeText(DetailedActivity.this, cityNameString + " successfully removed", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, null).show();
-            }
+        deleteCardBtn.setOnClickListener(v -> {
+            // Confirmation Dialog
+            new AlertDialog.Builder(DetailedActivity.this)
+                    .setTitle("Delete" + cityNameString)
+                    .setMessage("\t Are you sure you want to delete " + cityNameString + "? \n (Don't worry, you can add it again)")
+                    .setIcon(android.R.drawable.ic_delete)
+                    .setPositiveButton("Delete ", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            DeleteFromDbByName(cityNameString);
+                            Toast.makeText(DetailedActivity.this, cityNameString + " successfully removed", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, null).show();
         });
-        setHomeCardBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Utils.setHomePref(cityNameString, DetailedActivity.this);
-                Toast.makeText(DetailedActivity.this, "Set " + cityNameString + " as Home", Toast.LENGTH_SHORT).show();
-                finish();
-            }
+        setHomeCardBtn.setOnClickListener(v -> {
+            Utils.setHomePref(cityNameString, DetailedActivity.this);
+            Toast.makeText(DetailedActivity.this, "Set " + cityNameString + " as Home", Toast.LENGTH_SHORT).show();
+            finish();
         });
     }
 

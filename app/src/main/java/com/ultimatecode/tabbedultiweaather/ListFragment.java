@@ -48,14 +48,11 @@ public class ListFragment extends Fragment {
 
         FloatingActionButton addCityButton = (FloatingActionButton) view.findViewById(R.id.fabAdd);
         // event listener to launch the activity to add a new city
-        addCityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // create an intent which calls for starting the AddCityActivity
-                Intent intent = new Intent(getContext(), AddCityActivity.class);
-                // use the intent to start the pointed activity
-                startActivity(intent);
-            }
+        addCityButton.setOnClickListener(v -> {
+            // create an intent which calls for starting the AddCityActivity
+            Intent intent = new Intent(getContext(), AddCityActivity.class);
+            // use the intent to start the pointed activity
+            startActivity(intent);
         });
 
         // Inflate the layout for this fragment
@@ -108,56 +105,46 @@ public class ListFragment extends Fragment {
 
         citiesListView.setAdapter(cityAdapter);
 
-        citiesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getContext(), DetailedActivity.class);
-                intent.putExtra("city", cities.get(position));
-                startActivity(intent);
+        citiesListView.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent(getContext(), DetailedActivity.class);
+            intent.putExtra("city", cities.get(position));
+            startActivity(intent);
 
-            }
         });
 
-        citiesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        citiesListView.setOnItemLongClickListener((parent, view, position, id) -> {
+            final String selectedCity = cities.get(position);
 
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                final String selectedCity = cities.get(position);
+            final CharSequence[] actionsArr = {"Set " + selectedCity + " as Home", "Delete " + selectedCity, "Cancel"};
+            Log.d("TAG", "Long clicked");
 
-                final CharSequence[] actionsArr = {"Set " + selectedCity + " as Home", "Delete " + selectedCity, "Cancel"};
-                Log.d("TAG", "Long clicked");
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(fragContext);
+            AlertDialog.Builder builder = new AlertDialog.Builder(fragContext);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(fragContext);
-
-                builder.setTitle(selectedCity + " Actions:")
-                        .setItems(actionsArr, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // The 'which' argument contains the index position
-                                // of the selected item
-                                switch (which) {
-                                    // set as home
-                                    case 0:
-                                        Utils.setHomePref(selectedCity, getContext());
-                                        break;
-                                    // delete item
-                                    case 1:
-                                        cities.remove(position);
-                                        cityAdapter.notifyDataSetChanged();
-                                        DeleteFromDbByName(selectedCity);
-                                        // set home to default
-                                        //// TODO: 26/02/16 get GPS coordinates
-                                        Utils.setHomePref("Banana", getContext());
-                                        break;
-                                    // cancel
-                                    default:
-                                        break;
-                                }
-                            }
-                        });
-                builder.create().show();
-                return true;
-            }
+            builder.setTitle(selectedCity + " Actions:")
+                    .setItems(actionsArr, (dialog, which) -> {
+                        // The 'which' argument contains the index position
+                        // of the selected item
+                        switch (which) {
+                            // set as home
+                            case 0:
+                                Utils.setHomePref(selectedCity, getContext());
+                                break;
+                            // delete item
+                            case 1:
+                                cities.remove(position);
+                                cityAdapter.notifyDataSetChanged();
+                                DeleteFromDbByName(selectedCity);
+                                // set home to default
+                                //// TODO: 26/02/16 get GPS coordinates
+                                Utils.setHomePref("Banana", getContext());
+                                break;
+                            // cancel
+                            default:
+                                break;
+                        }
+                    });
+            builder.create().show();
+            return true;
         });
     }
 

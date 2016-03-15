@@ -14,6 +14,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -31,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URL;
 import java.util.List;
 import java.util.Locale;
@@ -207,9 +210,9 @@ public class Utils {
         if (height > reqHeight || width > reqWidth) {
             // Calculate the largest inSampleSize value that is a power of 2 and keeps both
             // height and width larger than the requested height and width.
-            while ((height / inSampleSize) > reqHeight / 2
-                    && (width / inSampleSize) > reqWidth / 2) {
-                inSampleSize *= 2;
+            while ((height / inSampleSize) > reqHeight
+                    && (width / inSampleSize) > reqWidth) {
+                inSampleSize *= 4;
             }
         }
 
@@ -223,5 +226,11 @@ public class Utils {
         if (subStrEnd > 0)
             tempString = tempString.substring(0, subStrEnd); // remove . for readability
         return tempString;
+    }
+
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

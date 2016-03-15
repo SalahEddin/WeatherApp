@@ -1,9 +1,8 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.ultimatecode.tabbedultiweaather.DetailedFragment">
-
-    <ScrollView
+ <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.ultimatecode.tabbedultiweaather.DetailedFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -221,6 +220,5 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
-    </ScrollView>
+ </ScrollView>
 
-</layout>
