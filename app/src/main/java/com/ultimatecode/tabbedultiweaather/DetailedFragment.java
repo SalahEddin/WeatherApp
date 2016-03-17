@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 
 import java.io.IOException;
 
@@ -104,6 +102,7 @@ public class DetailedFragment extends Fragment {
                 MainCardView.setVisibility(View.GONE);
                 DetailedCardView.setVisibility(View.GONE);
 
+                // TODO: 17/03/16 For Publishing: ask to turn WiFi On
                 // WifiManager wifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
                 // wifiManager.setWifiEnabled(true);
             }
@@ -165,11 +164,6 @@ public class DetailedFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-    }
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
     private class DownloadWeatherTask extends AsyncTask<String, Void, CityWeather> {

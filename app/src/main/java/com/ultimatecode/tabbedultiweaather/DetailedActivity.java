@@ -1,14 +1,13 @@
 package com.ultimatecode.tabbedultiweaather;
 
 import android.app.Activity;
-import android.content.DialogInterface;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.Button;
@@ -22,14 +21,17 @@ import java.io.IOException;
 
 public class DetailedActivity extends Activity {
 
+    // References to UI elements
     private TextView cityNameTextView;
     private TextView descTextView;
     private TextView windValTextView;
     private TextView cloudsValTextView;
     private TextView humidityValTextView;
     private TextView tempValTextView;
+
     private ImageView cityWeatherImg;
     private ImageView cityWeatherIcon;
+
     private Button mapBtn;
     private Button wikiBtn;
     private Button deleteCardBtn;
@@ -38,7 +40,7 @@ public class DetailedActivity extends Activity {
     private CardView MainCardView;
     private CardView DetailedCardView;
     private CardView noNetCardView;
-
+    private CardView optionsCardView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,12 +64,13 @@ public class DetailedActivity extends Activity {
         MainCardView = (CardView) findViewById(R.id.main_card_view);
         DetailedCardView= (CardView) findViewById(R.id.detail_cardview);
         noNetCardView= (CardView) findViewById(R.id.no_net_card_view);
+        optionsCardView = (CardView) findViewById(R.id.optionsCardView);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // get city Name TODO check valid not null
+        // get city Name
         final String cityNameString = getIntent().getStringExtra("city");
         cityNameTextView.setText(cityNameString);
         //maps the wiki and map buttons
@@ -75,17 +78,23 @@ public class DetailedActivity extends Activity {
         // prepare URL
         String url = Utils.CreateWeatherUrl(cityNameString.trim());
 
+        // if there's no Internet connection, then hide the weather cards
         if (Utils.isNetworkAvailable(getApplicationContext()) ) {
             new DownloadWeatherTask().execute(url);
+            MainCardView.setVisibility(View.VISIBLE);
+            DetailedCardView.setVisibility(View.VISIBLE);
+            optionsCardView.setVisibility(View.VISIBLE);
             noNetCardView.setVisibility(View.GONE);
         }
         else{
             MainCardView.setVisibility(View.GONE);
             DetailedCardView.setVisibility(View.GONE);
+            optionsCardView.setVisibility(View.GONE);
             noNetCardView.setVisibility(View.VISIBLE);
         }
     }
 
+    // currently use name of city, change to log, lan for Maps
     private void setButtonsListeners(final String cityNameString) {
         mapBtn.setOnClickListener(v -> {
             Uri gmmIntentUri = Uri.parse("http://maps.google.co.in/maps?q=" + cityNameString);
@@ -104,22 +113,21 @@ public class DetailedActivity extends Activity {
             i.setData(Uri.parse(url));
             startActivity(i);
         });
-
+        // logic of delete button
         deleteCardBtn.setOnClickListener(v -> {
             // Confirmation Dialog
             new AlertDialog.Builder(DetailedActivity.this)
                     .setTitle("Delete" + cityNameString)
                     .setMessage("\t Are you sure you want to delete " + cityNameString + "? \n (Don't worry, you can add it again)")
                     .setIcon(android.R.drawable.ic_delete)
-                    .setPositiveButton("Delete ", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            DeleteFromDbByName(cityNameString);
-                            Toast.makeText(DetailedActivity.this, cityNameString + " successfully removed", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
+                    .setPositiveButton("Delete ", (dialog, whichButton) -> {
+                        DeleteFromDbByName(cityNameString);
+                        Toast.makeText(DetailedActivity.this, cityNameString + " successfully removed", Toast.LENGTH_SHORT).show();
+                        finish();
                     })
                     .setNegativeButton(android.R.string.cancel, null).show();
         });
+        // Sets the city as home city
         setHomeCardBtn.setOnClickListener(v -> {
             Utils.setHomePref(cityNameString, DetailedActivity.this);
             Toast.makeText(DetailedActivity.this, "Set " + cityNameString + " as Home", Toast.LENGTH_SHORT).show();

@@ -1,19 +1,17 @@
 package com.ultimatecode.tabbedultiweaather;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -23,13 +21,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.BottomSheetDialog; //// TODO: 25/02/16 switch dialog to bottom sheet
-
 public class ListFragment extends Fragment {
 
     private Context fragContext;
-    private OnFragmentInteractionListener mListener;
 
     public ListFragment() {
         // Required empty public constructor
@@ -168,11 +162,6 @@ public class ListFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

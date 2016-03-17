@@ -1,25 +1,16 @@
 package com.ultimatecode.tabbedultiweaather;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.ultimatecode.tabbedultiweaather.database.MyDatabaseOpenHelper;
@@ -33,10 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
 import java.net.URL;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by salah on 18/02/16.
@@ -62,6 +50,7 @@ public class Utils {
 
     @NonNull
     public static String getHomePref(Context context) {
+        // TODO: 17/03/16 Use GPS to set home location
         /*
         Buggy Code to find home location
         // get lang, lat
@@ -158,7 +147,7 @@ public class Utils {
             conn.setDoInput(true); // connections can be used for input or output
             conn.setDoOutput(true);
             conn.connect(); // connects and starts the query
-            int response = conn.getResponseCode(); // should be 200 if all is OK TODO
+            int response = conn.getResponseCode(); // should be 200 if all is OK
             inputStream = conn.getInputStream();
             // handle response (which can be accessed via the ‘inputStream’)
             final BufferedReader reader = new BufferedReader(
@@ -212,7 +201,7 @@ public class Utils {
             // height and width larger than the requested height and width.
             while ((height / inSampleSize) > reqHeight
                     && (width / inSampleSize) > reqWidth) {
-                inSampleSize *= 4;
+                inSampleSize *= 2;
             }
         }
 

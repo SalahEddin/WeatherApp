@@ -23,6 +23,8 @@ public class CityWeather {
         this.icon = icon;
     }
 
+    // Data Getters
+
     @Override
     public String toString() {
         return name;
